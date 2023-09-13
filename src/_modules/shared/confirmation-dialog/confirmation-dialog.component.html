@@ -1,0 +1,116 @@
+<div class="confirm" [ngClass]="classMessage">
+  <button class="btn-closed" (click)="close()" *ngIf="!isIconSuccess">
+    <div class="img-container">
+      <img
+        width="auto"
+        height="auto"
+        src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/ecom/close.svg"
+      />
+    </div>
+  </button>
+  <button class="btn-closed" (click)="accept()" *ngIf="isIconSuccess">
+    <div class="img-container">
+      <img
+        width="auto"
+        height="auto"
+        src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/ecom/close.svg"
+      />
+    </div>
+  </button>
+  <div class="modal-body">
+    <div class="modal-check-is">
+      <img
+        *ngIf="success === true"
+        width="auto"
+        height="auto"
+        src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/gift/8thang3/card/icoSuccess.svg"
+      />
+      <img
+        *ngIf="success === false"
+        width="30"
+        height="30"
+        src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/portal-fc-new/cross.png"
+      />
+      <div class="title-popup" *ngIf="title" [innerHTML]="title"></div>
+    </div>
+
+    <!-- <div
+      class="message pt-10"
+      *ngIf="isButtonRight"
+      [innerHTML]="message"
+    ></div> -->
+    <div class="message" [innerHTML]="message"></div>
+  </div>
+  <div
+    class="group-btn btn-flex"
+    *ngIf="btnCancelText && btnOkText && !isButtonRight"
+  >
+    <button
+      *ngIf="btnCancelText === 'space' || btnOkText === 'space'"
+      type="button"
+      class="btn btn-space"
+    >
+      space
+    </button>
+    <button
+      *ngIf="btnCancelText && btnCancelText !== 'space'"
+      type="button"
+      class="btn btn-decline btn-secondary"
+      (click)="decline()"
+    >
+      {{ btnCancelText }}
+    </button>
+    <button
+      *ngIf="btnOkText && btnOkText !== 'space'"
+      type="button"
+      class="btn btn-accept"
+      (click)="accept()"
+    >
+      {{ btnOkText }}
+    </button>
+  </div>
+  <div
+    class="group-btn btn-100"
+    *ngIf="btnOkText && !btnCancelText && !isButtonRight"
+  >
+    <button
+      *ngIf="btnOkText"
+      type="button"
+      class="btn btn-accept"
+      (click)="accept()"
+    >
+      {{ btnOkText }}
+    </button>
+  </div>
+  <div
+    class="group-btn btn-100"
+    *ngIf="!btnOkText && btnCancelText && !isButtonRight"
+  >
+    <button
+      *ngIf="btnCancelText"
+      type="button"
+      class="btn btn-decline"
+      (click)="decline()"
+    >
+      {{ btnCancelText }}
+    </button>
+  </div>
+  <div
+    class="group-btn btn-100"
+    *ngIf="btnOkText && !btnCancelText && isButtonRight"
+  >
+    <div class="row">
+      <div class="col" style="width: 150px"></div>
+      <div class="col">
+        <button
+          *ngIf="btnOkText"
+          type="button"
+          class="btn btn-accept-IsButtonRight"
+          (click)="accept()"
+        >
+          {{ btnOkText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

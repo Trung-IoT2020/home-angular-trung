@@ -7,10 +7,10 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ConfirmationDialogService } from 'src/app/modules/shared/confirmation-dialog/confirmation-dialog.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { OtpService } from 'src/app/services/auth/otp.service';
-import { GeneralService } from 'src/app/services/general.service';
+import {GeneralService} from "../../../_services/general.service";
+import {AuthService} from "../../../_services/auth.service";
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService,
     private router: Router,
     private general: GeneralService,
-    private confirmDialog: ConfirmationDialogService
+    // private confirmDialog: ConfirmationDialogService
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,

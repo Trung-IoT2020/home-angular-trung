@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfirmationDialogService } from 'src/app/modules/shared/confirmation-dialog/confirmation-dialog.service';
+import {EnvironmentsService} from "./environments.service";
 
-import { EnvironmentsService } from '../environments.service';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,19 +17,13 @@ export class AuthService {
     private http: HttpClient,
     private envService: EnvironmentsService,
     private router: Router,
-    private confirmDialog: ConfirmationDialogService,
+    // private confirmDialog: ConfirmationDialogService,
     private spinner: NgxSpinnerService
   ) {}
   callToken(data: any): any {
     // const headers = { TOKEN: token }
     this.spinner.show();
-    this.http
-      .post<any>(
-        this.envService.apiUrl + '/fconnect-partner-management-api/login',
-        data,
-        {}
-      )
-      .subscribe(
+    this.http.post<any>(this.envService.apiUrl + '/fconnect-partner-management-api/login', data, {}).subscribe(
         (res) => {
           if (res && res.status === 1) {
             this.spinner.hide();
@@ -36,14 +31,14 @@ export class AuthService {
             this.saveToken(res.detail.access_token);
           } else {
             this.spinner.hide();
-            this.confirmDialog.confirm(
-              'Thông báo',
-              `<br><p>${res.msg}</p>`,
-              '',
-              'Đóng',
-              '',
-              false
-            );
+            // this.confirmDialog.confirm(
+            //   'Thông báo',
+            //   `<br><p>${res.msg}</p>`,
+            //   '',
+            //   'Đóng',
+            //   '',
+            //   false
+            // );
           }
         },
         (error) => {
