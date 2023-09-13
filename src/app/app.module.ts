@@ -20,7 +20,6 @@ import {SharedModule} from "../_modules/shared/shared.module";
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ClipboardModule,
     AppRoutingModule,
     NgbModule,
     SharedModule,
