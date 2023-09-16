@@ -1,0 +1,53 @@
+<div class="top">
+
+  <div class="row">
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+  </div>
+
+</div>
+
+<div class="row" *ngIf="listGateway && listGateway.length>0">
+  <div class="col-lg-3 d-flex align-items-strech">
+    <div class="card w-100" style="    border: none; border-radius: 16px;">
+      <div class="card-body" style="padding:1.25rem 0 ">
+        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9" style="padding:0  1.25rem">
+          <div class="mb-3 mb-sm-0">
+            <h5 class="card-title fw-semibold">Các thiết bị đang hoạt động</h5>
+          </div>
+        </div>
+        <div class="content-gateway" style=" margin: auto;">
+          <a class="item-content-gateway" *ngFor="let item of listGateway" (click)="gotoDevice(item)">
+            <img src="./assets/images/nathi/wifi-router.png" alt="" width="auto" height="auto">
+            <h4>Gateway 1</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8 d-flex align-items-strech">
+    <div class="card w-100" style="    border: none; border-radius: 16px;">
+      <div class="card-body">
+        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+          <div class="mb-3 mb-sm-0">
+            <h5 class="card-title fw-semibold">Bản đồ các thiết bị được đặt</h5>
+          </div>
+        </div>
+        <div class="content map-wrapper" style="position: relative" style="height: 500px; width:98%">
+          <div class="map-wrapper-map">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="bottom-create-device">
+  <a class="content-popup" (click)="createDevice()">
+    <img src="./assets/images/nathi/plus2.png" alt="">
+  </a>
+
+</div>

@@ -1,0 +1,705 @@
+<div class='table-auto' [ngClass]='tableClass' *ngIf='dataContent.length>0 &&  tableTH.length >0'>
+  <table
+    class='table align-middle table-row-dashed fs-6 gy-5 gx-5'
+    id='kt_ecommerce_category_table'
+  >
+    <thead>
+    <tr class='text-start text-dark-400 fw-bolder fs-7 text-uppercase gs-0'>
+      <th
+        scope='col'
+        *ngIf="keyCSKH === 'manage-list-game' || keyCSKH === 'landing-ldp'"
+      ></th>
+      <th
+        scope='col'
+        *ngIf="keyCSKH === 'crm-modal' || keyCSKH === 'crm-modal-contact' "
+      ></th>
+      <th scope='col' *ngFor='let columnHead of tableTH' class='min-w-200px' style=' padding-right: 1rem;'>
+        <div (click)='setOrder(columnHead.title)'>
+          {{ columnHead.title }}
+          <img
+            *ngIf='columnHead.title === this.order'
+            src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/menu-icons/arrow-up.svg'
+            width='12'
+            height='12'
+            alt=''
+            style="transform:{{
+                this.reverse ? 'rotate(-180deg)' : 'rotate(-0deg)'
+              }}"
+          />
+        </div>
+      </th>
+      <th scope='col'
+          *ngIf="keyCSKH === 'list-program-promotion'  && keyShowStatePromotion"
+          class='min-w-200px'
+          style='background: #009ef7 '>Tình trạng
+      </th>
+      <th scope='col' *ngIf="keyCSKH === 'list-program-promotion' && keyShowStatePromotion" class='min-w-200px'
+          style='background: #009ef7 '>Hành động
+      </th>
+      <th scope='col' *ngIf="keyCSKH === 'telesale-campaign'" class='min-w-200px'
+          style='background: #009ef7 '>Chức năng
+      </th>
+      <th scope='col' *ngIf="keyCSKH ==='table-calendar-reminder'  && assign_me === 0" class='min-w-200px'
+          style='background: #009ef7 '>Hành động
+      </th>
+      <th scope='col' *ngIf="keyCSKH === 'qr-code'" class='min-w-200px'
+          style='background: #009ef7 '>Hành động
+      </th>
+    </tr>
+    </thead>
+    <tbody class='fw-bold text-gray-600'>
+    <ng-container *ngFor="
+          let columnData of dataContent
+            | filter : searchAll
+            | orderBy : order : reverse
+             | paginate:  keyCSKH === 'table-calendar-reminder' || keyCSKH==='qr-code' || keyCSKH==='default-table-2'? {
+      itemsPerPage: itemsPerPage,
+      currentPage: p,
+      totalItems: itemsP2
+      } : {
+       itemsPerPage: itemsPerPage, currentPage: p
+      }; let i = index">
+      <tr
+        (click)="functionCrmModalCheck(keyCSKH,keyCSKH === 'crm-modal'?columnData['Mã khách hàng'] :keyCSKH === 'crm-modal-contact'?columnData['Mã liên hệ'] : '')">
+        <td scope='col' class='min-w-50px' *ngIf="keyCSKH === 'crm-modal'">
+          <label
+            class='d-flex align-middle'
+            [ngClass]="columnData['Mã khách hàng'] === this.valueInput ? 'active' : ''"
+
+            data-kt-button='true'
+            for="use_fgold{{columnData['Mã khách hàng']}}">
+              <span class='form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1'>
+                        <input
+                          style=' width: 2rem; height: 2rem;margin-top:8px'
+                          [checked]="columnData['Mã khách hàng'] === this.valueInput"
+                          type='radio'
+                          class='form-check-input'
+                          id="use_fgold{{columnData['Mã khách hàng']}}"
+                          name='use_fgold'
+                          [value]="columnData['Mã khách hàng']" />
+                      </span>
+          </label>
+        </td>
+        <td scope='col' class='min-w-50px' *ngIf="keyCSKH === 'crm-modal-contact'">
+          <label
+            class='d-flex align-middle'
+            [ngClass]=" columnData['Mã liên hệ'] === this.valueInput ? 'active' : ''"
+
+            data-kt-button='true'
+            for="use_fgold{{columnData['Mã liên hệ']}}">
+              <span class='form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1'>
+                        <input
+                          style='width: 2rem; height: 2rem;'
+                          [checked]="columnData['Mã liên hệ'] === this.valueInput"
+                          type='radio'
+                          class='form-check-input'
+                          id="use_fgold{{columnData['Mã liên hệ']}}"
+                          name='use_fgold'
+                          [value]="columnData['Mã liên hệ']" />
+                      </span>
+          </label>
+        </td>
+        <td
+          scope='col'
+          class='min-w-200px'
+          *ngIf="keyCSKH === 'manage-list-game'"
+        >
+          <div
+            style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 135px;
+              position: relative;
+            '
+          >
+            <div class='tooltipProject'>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/gift-game.png'
+                alt=''
+                style='margin-right: 10px'
+                (click)="
+                  openEvent('production', columnData, columnData['Mã game'])
+                "
+              />
+              <span class='tooltiptextProject'>Vật phẩm</span>
+            </div>
+            <div class='tooltipRule'>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/rule-game.png'
+                alt=''
+                (click)="openEvent('rule', columnData, columnData['Mã game'])"
+              />
+              <span class='tooltiptextRule'>Luật chơi</span>
+            </div>
+          </div>
+        </td>
+
+        <td *ngIf="keyCSKH === 'landing-ldp'">
+          <div class='wrapper'>
+            <div style='align-items: center; text-align: left'>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/edit.png'
+                alt=''
+                style='margin-right: 10px'
+                (click)="openEvent('edit', columnData, columnData['Mã LDP'])"
+              />
+            </div>
+          </div>
+        </td>
+
+        <td
+          *ngFor='let columnHead of tableTH; let j = index' class='align-middle'>
+<!--          [ngStyle]="{'background-color': funcDoublePhoneToColor(columnData['Số điện thoại'],this.listPhoneDoubleColor) ?  funcDoublePhoneToColor(columnData['Số điện thoại'],this.listPhoneDoubleColor): ''}">-->
+          <div
+            *ngIf="
+              keyCSKH === 'manage-list-game-2'
+                ? j === 0 || j === 1 || j === 2
+                : j === 0
+            "
+            style='display: flex; width: 100%; align-items: center'
+          >
+            <!--            <div class='form-check form-check-inline' style='margin-right: 8px' *ngIf="keyCSKH==='telesale-campaign'">-->
+            <!--              <input class='form-check-input' type='radio' name='inlineRadioOptions' id='inlineRadio{{i}}'-->
+            <!--                     value='option{{i}}'-->
+            <!--                     (click)="-->
+            <!--                openEvent(-->
+            <!--                  'radio-telesale-campaign',-->
+            <!--                  columnData,-->
+            <!--                  columnData[columnHead.dataField],-->
+            <!--                  j-->
+            <!--                )-->
+            <!--              ">-->
+            <!--            </div>-->
+            <a
+              style='color: #009ef7; word-break: break-word'
+              (click)="
+                openEvent(
+                  'detail',
+                  columnData,
+                  columnData[columnHead.dataField],
+                  j
+                )
+              "
+            >
+              {{ columnData[columnHead.dataField] }}
+            </a>
+          </div>
+          <div
+            *ngIf="
+              keyCSKH === 'manage-list-game-2'
+                ? j !== 0 && j !== 1 && j !== 2
+                : j !== 0
+            "
+            style='position: relative'
+
+          >
+            <!--Format Image-->
+            <div *ngIf='listImageName.includes(columnHead.dataField)'>
+              <img
+                [src]='columnData[columnHead.dataField]'
+                (error)='onError(i, dataContent)'
+                alt=''
+                width='40px'
+                height='40px'
+                style='object-fit: contain'
+              />
+            </div>
+            <!------------------------------------>
+
+            <!--Active-->
+            <div *ngIf='listActiveName.includes(columnHead.dataField)'>
+              <div
+                class='form-check'
+                style="opacity:{{
+                  columnData['Mặc định'] === 1 ||
+                  columnData['Loại'] === 'UNLUCKY' ||
+                  columnData['Loại'] === 'PLAYS'
+                    ? 0.5
+                    : 1
+                }}"
+              >
+                <span>
+                  {{columnData[columnHead.dataField]}}
+                  <label class='switch'>
+                    <input
+                      type='checkbox'
+                      class='compare-checkbox'
+                      [(ngModel)]='columnData[columnHead.dataField]'
+                      (change)="openEvent('state', dataContent, columnData, '')"
+                      [disabled]="
+                        columnData['Mặc định'] === 1 || columnData['Loại'] === 'UNLUCKY' ||
+                         columnData['Loại'] === 'PLAYS'  ? true  : false" />
+                    <span class='slider round'></span>
+                  </label>
+                </span>
+              </div>
+            </div>
+            <div *ngIf='listActiveSpecial.includes(columnHead.dataField)'>
+              <div class='form-check'>
+                <span>
+                  <label class='switch'>
+                    <input
+                      type='checkbox'
+                      class='compare-checkbox'
+                      [(ngModel)]='columnData[columnHead.title]'
+                      (change)="
+                        openEvent('coming_soon', dataContent, columnData, '')
+                      "
+                    />
+                    <span class='slider round'></span>
+                  </label>
+                </span>
+              </div>
+            </div>
+            <div *ngIf='listActiveState.includes(columnHead.dataField)'>
+              <div style='width: 80%; text-align: center; border-radius: 16px;color: #FFFFFF;padding: 4px;'
+                   [ngStyle]='{"background": columnData[columnHead.title] === 1?"#0bab00":"#FD0000"}'
+                   [innerText]='columnData[columnHead.title] === 1?"Đang hoạt động":"Sắp kết thúc"'></div>
+            </div>
+            <div *ngIf='listActiveDHTH.includes(columnHead.dataField)'>
+              <div style='width: 80%; text-align: center; border-radius: 16px;color: #FFFFFF;padding: 4px;'
+                   [ngStyle]='{"background": columnData[columnHead.title] === "Đúng hẹn"?"#0bab00":"#FD0000"}'
+                   [innerHTML]='columnData[columnHead.title]'></div>
+            </div>
+            <!------------------------------------>
+
+            <!--Caption note-->
+            <div triggers='mouseenter:mouseleave'
+                 placement="{{dataContent.length<4?'left': columnData[columnHead.title] && i>7 &&columnData[columnHead.title].length>18 ?'top' :  'bottom' }}"
+                 [ngbPopover]="columnData[columnHead.title]&&columnData[columnHead.title].length >= 18 ? columnData[columnHead.title] : ''"
+                 *ngIf='listShowCaptionName.includes(columnHead.dataField)'>
+              <a
+                [innerHTML]="
+                  !columnData[columnHead.title] ||
+                  columnData[columnHead.title] === '' ||
+                  columnData[columnHead.title] === null
+                    ? '-'
+                    : columnData[columnHead.title].length >= 18
+                    ? columnData[columnHead.title].slice(0, 18) + '....'
+                    : columnData[columnHead.title]
+                "></a>
+            </div>
+            <div
+              *ngIf='listLink.includes(columnHead.dataField)'
+              style='display: flex'
+            >
+              <div class='item-title-2' style='width: 300px'>
+                <a
+                  class='one-line'
+                  style='width: 100%'
+                  href='{{ columnData[columnHead.title] }}'
+                >
+                  {{
+                  !columnData[columnHead.title] ||
+                  columnData[columnHead.title] === "" ||
+                  columnData[columnHead.title] === null
+                    ? "-"
+                    : columnData[columnHead.title].slice(0, 30) + "...."
+                  }}
+                </a>
+              </div>
+              <div style='justify-content: right'>
+                <img
+                  src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/copy.png'
+                  width='22x'
+                  height='22px'
+                  style='margin-left: 10px'
+                  (click)='copyLinkShow(columnData[columnHead.title])'
+                />
+              </div>
+            </div>
+            <!------------------------------------>
+            <!--              style="color: #009ef7; word-break: break-word"-->
+            <div *ngIf='listOrder.includes(columnHead.dataField)'>
+              <a (click)="openPopup('detail-order',columnData[columnHead.dataField])">
+                {{
+                !columnData[columnHead.dataField] ||
+                columnData[columnHead.dataField] === "" ||
+                columnData[columnHead.dataField] === null
+                  ? ""
+                  : columnData[columnHead.dataField]
+                }}
+              </a>
+            </div>
+            <!--  QR -->
+            <!--          <div *ngIf="listQR.includes(columnHead.dataField)" #printDiv id="my-div">-->
+            <!--            <qrcode [qrdata]="!columnData[columnHead.dataField] || columnData[columnHead.dataField] === '' ||-->
+            <!--            columnData[columnHead.dataField] === null-->
+            <!--            ? ''-->
+            <!--            : columnData[columnHead.dataField]" [width]="60" [errorCorrectionLevel]="'M'">-->
+
+            <!--            </qrcode>-->
+            <!--          </div>-->
+            <!-- Format Number pipe vd: 100.000 -->
+            <div *ngIf='listNumberFormatName.includes(columnHead.dataField)'>
+              {{
+              !columnData[columnHead.dataField] ||
+              columnData[columnHead.dataField] === "" ||
+              columnData[columnHead.dataField] === null
+                ? "0"
+                : (columnData[columnHead.dataField] | formatNumberPipe)
+              }}
+              <span *ngIf="columnHead.dataField.includes('tiền')">đ</span>
+            </div>
+            <!------------------------------------>
+            <a style='color: #009ef7' (click)='
+                openEvent(
+                  columnHead.dataField,
+                  columnData,
+                  columnData[columnHead.dataField],
+                  j
+                )
+              ' *ngIf="keyCSKH==='crm-quote'&& listActiveClick.includes(columnHead.dataField)">
+              {{
+              !columnData[columnHead.dataField] ||
+              columnData[columnHead.dataField] === "" ||
+              columnData[columnHead.dataField] === null
+                ? "-"
+                : columnData[columnHead.dataField]
+              }}
+            </a>
+            <a
+              class='one-line'
+              *ngIf=" keyCSKH!=='crm-quote'?
+                !listNumberFormatName.includes(columnHead.dataField) &&
+                !listImageName.includes(columnHead.dataField) &&
+                !listActiveName.includes(columnHead.dataField) &&
+                !listShowCaptionName.includes(columnHead.dataField) &&
+                !listLink.includes(columnHead.dataField) &&
+                !listActiveSpecial.includes(columnHead.dataField) &&
+                !listOrder.includes(columnHead.dataField) &&
+                !listActiveState.includes(columnHead.dataField) &&
+                !listActiveDHTH.includes(columnHead.dataField) &&
+                !listQR.includes(columnHead.dataField):
+                !listActiveClick.includes(columnHead.dataField)&&
+                !listNumberFormatName.includes(columnHead.dataField) &&
+                !listImageName.includes(columnHead.dataField) &&
+                !listActiveName.includes(columnHead.dataField) &&
+                !listShowCaptionName.includes(columnHead.dataField) &&
+                !listLink.includes(columnHead.dataField) &&
+                !listActiveSpecial.includes(columnHead.dataField) &&
+                !listOrder.includes(columnHead.dataField) &&
+                !listActiveState.includes(columnHead.dataField) &&
+                !listActiveDHTH.includes(columnHead.dataField) &&
+                !listQR.includes(columnHead.dataField)
+              "
+              [innerHTML]="
+                columnData[columnHead.title] === null ||
+                columnData[columnHead.title] === ''
+                  ? '-'
+                  : columnData[columnHead.title]
+              "
+            >
+            </a>
+          </div>
+        </td>
+        <td scope='col' class='min-w-200px' *ngIf="keyCSKH === 'list-program-promotion' && keyShowStatePromotion">
+          <div class='item-title-2' style='margin-top: 8px'>
+            <a [ngStyle]="{color: checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 1? '#006dab':
+            checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 2 ? '#f78900':
+          checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 3 ? '#0bab00':
+          checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 4 ?'#FD0000': '#000000',
+            'line-height': 1.6}">
+              {{checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 4 ? 'Đã kết thúc' :
+              checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 3 ? 'Đang diễn ra' :
+                checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 2 ? 'Sắp kết thúc' :
+                  checkDateFormView(columnData['Thời gian bắt đầu'], columnData['Thời gian kết thúc'], columnData['Trạng thái chương trình']) === 1 ? 'Sắp bắt đầu' : 'Tạm ẩn'}}</a>
+          </div>
+        </td>
+        <td scope='col' class='align-middle min-w-200px' *ngIf="keyCSKH === 'qr-code'">
+          <div style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 192px;
+              position: relative;
+              padding: 0;'>
+            <button
+              mat-button
+              [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action'>
+              <span>Hành động</span>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg'
+                alt=''
+                class='w-15px ml-1'
+              />
+            </button>
+            <mat-menu
+              #menu='matMenu'>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent('printIn', columnData, columnData['Mã QR'], 5)
+              "
+              >
+                In
+              </a>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent(
+                  'download',
+                  columnData,
+                  columnData['Mã QR'],
+                  6
+                )
+              "
+              >
+                Tải xuống
+              </a>
+            </mat-menu>
+          </div>
+        </td>
+        <td scope='col' class='align-middle min-w-200px'
+            *ngIf="keyCSKH === 'table-calendar-reminder' && assign_me === 0">
+          <div style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 192px;
+              position: relative;
+              padding: 0;'>
+            <button
+              mat-button
+              [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action'>
+              <span>Hành động</span>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg'
+                alt=''
+                class='w-15px ml-1'
+              />
+            </button>
+            <mat-menu #menu='matMenu'>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent('receive_orders', columnData, columnData['Mã nhắc lịch'], 5)
+              "
+              >
+                Nhận đơn
+              </a>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent(
+                  'single_assignment',
+                  columnData,
+                  columnData['Mã nhắc lịch'],
+                  6
+                )
+              "
+              >
+                Phân công đơn
+              </a>
+            </mat-menu>
+          </div>
+        </td>
+        <td scope='col' class='align-middle min-w-200px'
+            *ngIf="keyCSKH === 'telesale-campaign'">
+          <div style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 192px;
+              position: relative;
+              padding: 0;'>
+            <button
+              mat-button
+              [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action'>
+              <span>Chức năng</span>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg'
+                alt=''
+                class='w-15px ml-1'
+              />
+            </button>
+            <mat-menu #menu='matMenu'>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent('edit', columnData, columnData['Mã chương trình'], 2)
+              "
+              >
+                Chỉnh sửa
+              </a>
+              <a mat-menu-item *ngIf='addData' (click)="openEvent('import', columnData, columnData['Mã chương trình'], 3)">
+                Thêm 1 khách hàng
+              </a>
+              <a mat-menu-item  *ngIf='addData'  (click)="openEvent('importEX', columnData, columnData['Mã chương trình'], 4)">
+                Thêm nhiều khách hàng
+              </a>
+              <a  *ngIf='!addData && keyFolderType  && keyFolderType === "POTENTIAL_CUSTOMER"'
+                  mat-menu-item
+                (click)="
+                openEvent('random', columnData, columnData['Mã chương trình'], 5)
+              "
+              >
+                Phân công chia đều cho nhân viên
+              </a>     <a  *ngIf='!addData'
+                  mat-menu-item
+                (click)="
+                openEvent('random_customer', columnData, columnData['Mã chương trình'], 9)
+              "
+              >
+                Phân công số lượng KH cho 1 nhân viên
+              </a>
+              <a  *ngIf='!addData && keyFolderType  && keyFolderType === "POTENTIAL_CUSTOMER"'
+                mat-menu-item
+                (click)="
+                openEvent(
+                  'city',
+                  columnData,
+                  columnData['Mã chương trình'],
+                  6
+                )
+              "
+              >
+                Phân công theo khu vực cho nhân viên
+              </a>
+              <a mat-menu-item  *ngIf='!addData'  (click)="openEvent('del_customer', columnData, columnData['Mã chương trình'], 7)">
+                Xóa 1 khách hàng
+              </a>
+              <a mat-menu-item  *ngIf='!addData'  (click)="openEvent('del_folder', columnData, columnData['Mã chương trình'], 8)">
+                Xóa chương trình
+              </a>
+            </mat-menu>
+          </div>
+        </td>
+        <td class='align-middle' *ngIf="keyCSKH === 'list-program-promotion' && keyShowStatePromotion">
+          <div
+            style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 192px;
+              position: relative;
+              padding: 0;'>
+
+            <button
+              mat-button
+              [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action'
+            >
+              <span>Hành động</span>
+              <img
+                src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg'
+                alt=''
+                class='w-15px ml-1'
+              />
+            </button>
+            <mat-menu
+              #menu='matMenu'>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent('copy', columnData, columnData['Mã chương trình'], 3)
+              "
+              >
+                Nhân bản
+              </a>
+              <a
+                mat-menu-item
+                (click)="
+                openEvent(
+                  'detail',
+                  columnData,
+                  columnData['Mã chương trình'],
+                  2
+                )
+              "
+              >
+                Chỉnh sửa
+              </a>
+            </mat-menu>
+            <div class='form-check'>
+                <span>
+                  <label class='switch'>
+                    <input
+
+                      type='checkbox'
+                      class='compare-checkbox'
+                      [ngModel]="columnData['Trạng thái chương trình'] === 'Public' ? true: false"
+                      (change)="openEvent('state', dataContent, columnData, columnData['Trạng thái chương trình'])"
+                    />
+                    <span class='slider round'></span>
+                  </label>
+                </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
+<div
+  class='not-found-data'
+  *ngIf='!dataContent || dataContent.length === 0 || !tableTH || tableTH.length ===0'
+  style='text-align: center; margin: {{keyCSKH ==="crm-chain-seller-detail"? "30px":0}}'
+>
+  <div class='row' style='margin: {{keyCSKH ==="crm-chain-seller-detail"? "50px":0}}'>
+    <div class='col text-center' style='padding: {{keyCSKH ==="crm-chain-seller-detail"? "5%":0}}'>
+      <img
+        src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/lux-internet/mascotHistoryx4.png'
+        alt=''
+        width='auto'
+        height='317px'
+      />
+    </div>
+  </div>
+  <i>Không tìm thấy dữ liệu</i>
+</div>
+<div *ngIf='!exportEX'>
+  <div
+    class='d-flex align-items-center pagination-wrap'
+    *ngIf='dataContent && dataContent.length > 0 &&  tableTH.length >0'
+  >
+  <span *ngIf="searchAll === ''"
+  >Hiển thị
+    {{
+    itemsPerPage * p > dataContent.length
+      ? itemsPerPage * (p - 1) + (dataContent.length % 10)
+      : itemsPerPage * p
+    }}
+    kết quả trên {{ dataContent.length }}
+  </span>
+    <span *ngIf="searchAll !== ''"> </span>
+    <div class='pagination-container'>
+      <pagination-controls
+        (pageChange)='changePage2($event)'
+        previousLabel=''
+        nextLabel=''
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<div *ngIf='exportEX'>
+  <div
+    class='d-flex align-items-center pagination-wrap'
+    *ngIf='dataContent && dataContent.length > 0 &&  tableTH.length >0'>
+       <span
+       >Hiển thị
+         {{
+         itemsPerPage * p > itemsP2
+           ? itemsPerPage * (p - 1) + (itemsP2 % 10)
+           : itemsPerPage * p
+         }}
+         kết quả trên {{ itemsP2 }}</span
+       >
+    <div class='pagination-container'>
+      <pagination-controls
+        (pageChange)='changePage($event)'
+        previousLabel=''
+        nextLabel=''
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+<div class='success-inform' @flyInOut *ngIf='showSuccessInform'>
+  {{ msgAddCart }}
+</div>
