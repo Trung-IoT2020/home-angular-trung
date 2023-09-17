@@ -1,0 +1,42 @@
+$color-main: #1b2f75;
+$color-second: #f2f5fe;
+$color-third: #4564ed;
+$color-third-opacity: rgb(53, 128, 255, 0.5);
+$color-forth: #f5f9ff;
+$color-fifth: #cad9ff;
+$color-black: #000000;
+$color-noactive: #bdbdbe;
+$color-light-main: lightblue;
+$color-white-filter: rgba(255, 255, 255, 0.3);
+$color-black-filter: rgba(0, 0, 0, 0.8);
+$color-black-filter5: rgba(0, 0, 0, 0.5);
+$color-button-store: #f7f0f0;
+$color-background-reason: #cce8f9;
+$color-white: #fff;
+$color-bg: #f8f8f8;
+$card-padding: 20px;
+$grid-gutter: 30px;
+$padding-heading: 2rem;
+$padding-section-home: 2rem;
+$color-sixth: #0050ff;
+$finalHeight: 100vw;
+$finalWidth: 3 * $finalHeight;
+$scrollBarHeight: 1px;
+// Media Queries breakpoints
+$small: 480px;
+$medium: 768px;
+$large: 992px;
+$x-large: 1200px;
+
+$font-base: 1.5rem;
+
+@keyframes mymove {
+  from {
+    width: 300px;
+    top: 300px;
+  }
+  to {
+    width: 300px;
+    top: 0;
+  }
+}

@@ -1,0 +1,88 @@
+@import "src/assets/scss/variable";
+
+.left-side{
+  float: left;
+}
+.right-side {
+  float: right;
+}
+.btn {
+  //font-size: 1.5rem;
+}
+.btn-green {
+  background: green;
+  color: white;
+  &:hover{
+    background: orange;
+  }
+}
+.btn-blue {
+  background: $color-third !important;
+  border-radius: 20px;
+  color: white !important;
+}
+.btn-blue1 {
+  background: $color-third !important;
+  border-radius: 20px;
+  color: white !important;
+}
+.btn-gray {
+  background: #EEEEEE;
+  border-radius: 8px;
+  color: #767676;
+}
+.btn-cancel {
+  border-radius: 20px;
+  background: white;
+  border: 1px solid $color-third !important;
+  color: $color-third !important;
+  margin-right: 0.5rem;
+}
+.btn-google {
+  background-color: #ffffff;
+  color: #747474;
+  border: 1px solid red;
+
+  //&:hover {
+  //  opacity: 0.89;
+  //  background-color: red;
+  //  border: 2px solid #ea4335;
+  //  color: white;
+  //}
+}
+.fa-google {
+  background: linear-gradient(to bottom left, transparent 49%, #fbbc05 50%) 0 25%/48% 40%,
+  linear-gradient(to top left, transparent 49%, #fbbc05 50%) 0 75%/48% 40%,
+  linear-gradient(-40deg, transparent 53%, #ea4335 54%),
+  linear-gradient(45deg, transparent 46%, #4285f4 48%),
+  #34a853;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  margin-right: 1rem;
+}
+
+.btn-facebook {
+  background-color: white;
+  border: 2px solid midnightblue;
+  color: midnightblue;
+}
+.btn-facebook:hover {
+  background-color: #3b5998;
+  border: none;
+  color: #ffffff;
+}
+
+.fa-facebook {
+  margin-right: 1rem;
+}
+.OR-line {
+  position: relative;
+}
+.btn:focus {
+  outline: none !important;
+  border: none;
+  box-shadow: none !important;
+}
