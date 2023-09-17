@@ -1,1 +1,169 @@
-<p>manage-device works!</p>
+<div class='card card-flush'>
+  <div class='card-header align-items-center'>
+    <!--begin::Card title-->
+    <div class='card-title'>
+      <!--begin::Search-->
+      <div class='d-flex align-items-center position-relative my-1 w-250px'>
+        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+        <span class='svg-icon svg-icon-1 position-absolute ms-4'>
+            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
+              <rect opacity='0.5' x='17.0365' y='15.1223' width='8.15546' height='2' rx='1'
+                    transform='rotate(45 17.0365 15.1223)' fill='black'/>
+              <path
+                d='M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z'
+                fill='black'
+              />
+            </svg>
+          </span>
+        <input
+          [(ngModel)]='searchText'
+          type='search'
+          data-kt-ecommerce-category-filter='search'
+          class='form-control form-control-solid w-200px ps-14'
+          placeholder='Tìm kiếm'
+        />
+      </div>
+    </div>
+    <div class='card-toolbar' style='gap: 10px; background-color: #f5f8fa; padding: 4px;border-radius: 8px;'>
+      <button mat-button [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action ml-3'>
+        <span>Hành động</span>
+        <img src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg' alt='' class='w-15px ml-1'/>
+      </button>
+      <mat-menu #menu='matMenu'>
+        <a mat-menu-item (click)='exportFile()'>Export Excel</a>
+      </mat-menu>
+    </div>
+
+  </div>
+  <div class='card-body pt-0'>
+    <div class='table-auto' *ngIf='dataContent && tableTH && dataContent.length>0 &&  tableTH.length >0'>
+      <table
+        class='table align-middle table-row-dashed fs-6 gy-5 gx-5'
+        id='kt_ecommerce_category_table'
+      >
+        <thead>
+        <tr class='text-start text-dark-400 fw-bolder fs-7 text-uppercase gs-0'>
+          <th scope='col' *ngFor='let columnHead of tableTH' class='min-w-200px' style=' padding-right: 1rem;'>
+            <div (click)='setOrder(columnHead.title)'>
+              {{ columnHead.title }}
+              <img
+                *ngIf='columnHead.title === this.order'
+                src='./assets/images/nathi/arrow-up.svg'
+                width='12'
+                height='12'
+                alt=''
+                style="transform:{{
+                this.reverse ? 'rotate(-180deg)' : 'rotate(-0deg)'
+              }}"
+              />
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody class='fw-bold text-gray-600'>
+        <ng-container *ngFor="
+          let columnData of dataContent
+            | filter : searchText
+            | orderBy : order : reverse
+             | paginate:   {
+       itemsPerPage: itemsPerPage, currentPage: p
+      }; let i = index">
+          <tr>
+            <td
+              *ngFor='let columnHead of tableTH; let j = index' class='align-middle'>
+              <div>
+                <div triggers='mouseenter:mouseleave'
+                     placement="{{dataContent.length<4?'left': columnData[columnHead.title] && i>7 &&columnData[columnHead.title].length>18 ?'top' :  'bottom' }}"
+                     [ngbPopover]="columnData[columnHead.title]&&columnData[columnHead.title].length >= 18 ? columnData[columnHead.title] : ''"
+                     *ngIf='listShowCaptionName.includes(columnHead.dataField)'>
+                  <a
+                    [innerHTML]="
+                  !columnData[columnHead.title] ||
+                  columnData[columnHead.title] === '' ||
+                  columnData[columnHead.title] === null
+                    ? '-'
+                    : columnData[columnHead.title].length >= 18
+                    ? columnData[columnHead.title].slice(0, 18) + '....'
+                    : columnData[columnHead.title]
+                "></a>
+                </div>
+
+                <div *ngIf='listNumberFormatName.includes(columnHead.dataField)'>
+                  {{
+                  !columnData[columnHead.dataField] ||
+                  columnData[columnHead.dataField] === "" ||
+                  columnData[columnHead.dataField] === null
+                    ? "0"
+                    : (columnData[columnHead.dataField] | formatNumberPipe)
+                  }}
+                  <span *ngIf="columnHead.dataField.includes('tiền')">đ</span>
+                </div>
+                <!------------------------------------>
+                <a
+                  class='one-line'
+                  *ngIf="
+                !listNumberFormatName.includes(columnHead.dataField) &&
+                !listActiveName.includes(columnHead.dataField) &&
+                !listShowCaptionName.includes(columnHead.dataField)
+            "
+                  [innerHTML]="
+                columnData[columnHead.title] === null ||
+                columnData[columnHead.title] === ''
+                  ? '-'
+                  : columnData[columnHead.title]
+              "
+                >
+                </a>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class='not-found-data'
+      *ngIf='!dataContent || dataContent.length === 0 || !tableTH || tableTH.length ===0'
+      style='text-align: center; margin: 0'
+    >
+      <div class='row'>
+        <div class='col text-center' style='padding: 5%'>
+          <img
+            src='./assets/images/nathi/no-connection.png'
+            alt=''
+            width='64'
+            height='64'
+          />
+        </div>
+      </div>
+      <i>Không tìm thấy dữ liệu</i>
+    </div>
+
+    <div
+        class='d-flex align-items-center pagination-wrap'
+        *ngIf='dataContent && dataContent.length > 0 &&  tableTH.length >0'
+      >
+  <span *ngIf="searchText === ''"
+  >Hiển thị
+    {{
+    itemsPerPage * p > dataContent.length
+      ? itemsPerPage * (p - 1) + (dataContent.length % 10)
+      : itemsPerPage * p
+    }}
+    kết quả trên {{ dataContent.length }}
+  </span>
+        <span *ngIf="searchText !== ''"> </span>
+        <div class='pagination-container'>
+          <pagination-controls
+            (pageChange)='changePage2($event)'
+            previousLabel=''
+            nextLabel=''
+          ></pagination-controls>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<app-spinner-layout></app-spinner-layout>

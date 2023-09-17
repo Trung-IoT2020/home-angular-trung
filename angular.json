@@ -24,7 +24,9 @@
               "js-sha256",
               "xlsx",
               "chart.js",
-              "file-saver"
+              "file-saver",
+              "moment",
+              "leaflet"
             ],
             "index": "src/index.html",
             "main": "src/main.ts",

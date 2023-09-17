@@ -1,12 +1,37 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpClient } from '@angular/common/http';
 
+
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 @Injectable({
   providedIn: 'root',
 })
 export class GeneralService {
+  fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  fileExtension = '.xlsx';
+  permissionList: any = [];
+  url: any;
+
+  myPromise: any;
   constructor() {
   }
+  public exportExcel(jsonData: any[], fileName: string, sheetName: string = 'data'): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
 
+    const wb: XLSX.WorkBook = { Sheets: { [sheetName]: ws }, SheetNames: [sheetName] };
+    const excelBuffer: any = XLSX.write(wb, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
+    this.saveExcelFile(excelBuffer, fileName);
+  }
+  public saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: this.fileType });
+    FileSaver.saveAs(data, fileName + this.fileExtension);
+  }
   onActivate(event: any): void {
     window.scroll(0, 0);
   }
@@ -169,4 +194,89 @@ export class GeneralService {
       return str.replace(/[^0-9]+/g, '');
     }
   }
+  formatDate(a: any): any {
+    if (!a || a === '') {
+      return undefined;
+    } else {
+      console.log(a);
+      const b = a.split(' ');
+      const b1 = b[0].split('/');
+      const b2 = b1[2] + '-' + b1[1] + '-' + b1[0] + ' ' + b[1];
+      return b2;
+    }
+  }
+
+  dateFormatYYYYMMDD(date: Date): string {
+    const day = Number(date.getDate()) < 10 ? '0' + Number(date.getDate()) : Number(date.getDate());
+    const month = Number(date.getMonth()) + 1 < 10 ? '0' + Number(Number(date.getMonth()) + 1) : Number(Number(date.getMonth()) + 1);
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
+  convertTextYYYYMMDDToDDMMYYYY(a: any): any {
+    let v = '';
+    if (a.includes('-')) {
+      let formatV = a.split('-');
+      v = formatV[2] + '/' + formatV[1] + '/' + formatV[0];
+    } else {
+      v = a;
+    }
+    return v;
+  }
+
+  convertStrYYMMDDhhmmssToDDMMYYhhmmss(a: any): any {
+    let v = '';
+    if (a.includes('-') && a.includes(' ')) {
+      let formatV = a.split(' ');
+      let formatV2 = formatV[0].split('-');
+      v = formatV2[2] + '/' + formatV2[1] + '/' + formatV2[0] + ' ' + formatV[1];
+    } else {
+      v = a;
+    }
+    return v;
+  }
+
+  convertStrDDMMYYYYTimetoYYYYMMDDTime(a: any): any {
+    let data = a.includes(', ') ? a.split(', ') : a.split(' ');
+    let formatData = data[0].split('/');
+    let v;
+    if (data[0] && data[1] && formatData) {
+      v = formatData[2] + '-' + formatData[1] + '-' + formatData[0] + ' ' + data[1];
+    } else {
+      v = a;
+    }
+    return v;
+  }
+
+  convertDateToDDMMYY(date: Date): any {
+    return [this.convertNumber(date.getDate()), this.convertNumber(date.getMonth() + 1), this.convertNumber(date.getFullYear())].join('/');
+  }
+
+  convertDateToDDMMYY2(date: Date): any {
+    return [this.convertNumber(date.getDate()), this.convertNumber(date.getMonth() + 1), this.convertNumber(date.getFullYear())].join('-');
+  }
+
+  convertDateToYYYYMMDD2(date: Date): any {
+    return [this.convertNumber(date.getFullYear()), this.convertNumber(date.getMonth() + 1), this.convertNumber(date.getDate())].join('/');
+  }
+
+  formatTable(table_need_format: any, table_sample: any): any {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < table_need_format.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < table_sample.length; j++) {
+        const key = table_sample[j].key;
+        const value = table_sample[j].title;
+        if (table_need_format[i].hasOwnProperty(key)) {
+          // @ts-ignore
+          table_need_format[i][value] = table_need_format[i][key];
+          // @ts-ignore
+          delete table_need_format[i][key];
+        }
+      }
+    }
+    return table_need_format;
+  }
+
+
 }

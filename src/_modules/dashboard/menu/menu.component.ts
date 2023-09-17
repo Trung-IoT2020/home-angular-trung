@@ -51,7 +51,7 @@ export class MenuComponent implements OnInit {
         {
           group: "Device",
           name: "Xem note hoạt động",
-          link: "/device/note",
+          link: "/chart-device",
           icon: 'ti ti-layout-dashboard',
           type: "TENANT"
         },
@@ -73,6 +73,8 @@ export class MenuComponent implements OnInit {
           type: "Customer"
         }]
     }
+
+    localStorage.setItem('data-menu', JSON.stringify(this.listMenu));
 
     this.funcAddMenu(this.listMenu);
   }
@@ -99,7 +101,7 @@ export class MenuComponent implements OnInit {
           const listItem = document.createElement("li");
           listItem.className = "sidebar-item";
           listItem.innerHTML = `
-        <a class="sidebar-link" href="${item.link}" aria-expanded="false">
+        <a class="sidebar-link" href="${item.link}"  aria-expanded="false">
           <span>
             <i class="${item.icon}"></i>
           </span>

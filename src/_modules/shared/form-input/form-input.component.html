@@ -1,0 +1,356 @@
+<div class="row">
+  <div class="col">
+    <div class="mb-2 fv-row">
+      <label class="form-label" [ngClass]="required ? 'required' : ''" style="display: flex" *ngIf="nameTitleInput !== ''"
+        >{{ nameTitleInput }}
+        <div class="popup-caption" *ngIf="popupCaption">
+          <img src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/employee/info.svg" alt="" />
+          <div class="note-caption">
+            <p [innerHTML]="noteCaption"></p>
+          </div>
+        </div>
+      </label>
+      <div class="input-promotion" *ngIf="keyType === 'Text'">
+        <input
+          [ngStyle]="styleInput"
+          class="form-control"
+          type="text"
+          [placeholder]="placeholder"
+          [(ngModel)]="valueInput"
+          (ngModelChange)="changeEvent($event)"
+          [disabled]="disabled"
+        />
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Number'">
+        <input
+          [ngStyle]="styleInput"
+          class="form-control"
+          type="text"
+          (keydown)="preventMinus($event)"
+          [placeholder]="placeholder"
+          [(ngModel)]="valueInput"
+          (ngModelChange)="changeEvent($event)"
+          [disabled]="disabled"
+        />
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Email'">
+        <input
+          [ngStyle]="styleInput"
+          class="form-control"
+          type="email"
+          [placeholder]="placeholder"
+          [(ngModel)]="valueInput"
+          (ngModelChange)="changeEvent($event)"
+          [disabled]="disabled"
+        />
+        <div *ngIf="ktEmail === 1" class="error">
+          <span>Email chưa đúng định dạng</span>
+        </div>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Phone'">
+        <input
+          [ngStyle]="styleInput"
+          class="form-control"
+          type="tel"
+          (keydown)="preventMinus($event)"
+          [placeholder]="placeholder"
+          [(ngModel)]="valueInput"
+          (ngModelChange)="changeEvent($event)"
+          [maxlength]="maxSDT"
+          [disabled]="disabled"
+        />
+        <div *ngIf="ktPhone === 1" class="error">
+          <span>Số điện thoại chưa đúng định dạng</span>
+        </div>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Select'">
+        <ng-select
+          class="calculation-type"
+          [items]="dataCustom"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          (change)="changeEvent($event)"
+          [(ngModel)]="selectCustom"
+          [disabled]="disabled"
+        >
+        </ng-select>
+      </div>
+      <div class="input-promotion list-popup-filter" *ngIf="keyType === 'Select_Button'">
+        <ng-select
+          class="calculation-type"
+          style="border: none !important"
+          [items]="dataSelectButton.data"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          [(ngModel)]="selectButton"
+          (change)="changeEventButton(1, selectButton)"
+          [disabled]="disabled"
+        ></ng-select>
+        <button [disabled]="disabled" (click)="changeEventButton(2, selectButton)">
+          <img [src]="dataSelectButton.logo" alt="" />
+        </button>
+      </div>
+
+      <div class="input-promotion" *ngIf="keyType === 'Select_Multi'">
+        <ng-select
+          [multiple]="true"
+          [closeOnSelect]="false"
+          (ngModelChange)="changeEvent($event)"
+          class="custom-multi-select"
+          [clearable]="false"
+          [items]="dataMulti"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          [(ngModel)]="selectMulti"
+        >
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngIf="items.length > 0">
+              <span class="ng-value-label">{{ items.length }} trạng thái được chọn...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-header-tmp>
+            <div>
+              <a class="btn btn-link" (click)="selectAllMulti()">
+                <span class="icon" [ngClass]="isAllMulti || (selectMulti?.length === checkAllMulti?.length && selectMulti?.length > 0) ? 'all' : ''">
+                  <img
+                    *ngIf="isAllMulti || (selectMulti?.length === checkAllMulti?.length && selectMulti?.length > 0)"
+                    src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/report/icon-check.svg"
+                    alt=""
+                    width="auto"
+                    height="auto"
+                  /> </span
+                ><span>Tất cả</span></a
+              >
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-index="index" let-item$="item$">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [ngModel]="item$.selected" class="custom-control-input" />
+              <label class="form-check-label ml-2 custom-control-label"> {{ item.name }}</label>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="input-promotion-date" *ngIf="keyType === 'Date'">
+        <input matInput [matDatepicker]="picker" [(ngModel)]="oneDate" [min]="minOneDate" [max]="maxOneDate" (ngModelChange)="changeEvent($event)" disabled style="height: 36px" />
+
+        <mat-datepicker-toggle matIconSuffix [for]="picker" class="general-height-date"></mat-datepicker-toggle>
+        <mat-datepicker #picker [disabled]="disabled" class="general-height-date"></mat-datepicker>
+      </div>
+      <div class="input-promotion-date" *ngIf="keyType === 'Datetime'">
+        <input matInput [ngxMatDatetimePicker]="picker3" [(ngModel)]="oneDatetime"
+               [min]="minOneDatetime" [max]="maxOneDatetime" (ngModelChange)="changeEvent($event)" />
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #picker3
+          [showSpinners]="showSpinners"
+          [showSeconds]="showSeconds"
+          [stepHour]="stepHour"
+          [stepMinute]="stepMinute"
+          [stepSecond]="stepSecond"
+          [touchUi]="touchUi"
+          [color]="color"
+          [enableMeridian]="enableMeridian"
+          [disabled]="disabled"
+        >
+        </ngx-mat-datetime-picker>
+      </div>
+      <div class="input-promotion-date input-date position-relative" style="width: 110%" *ngIf="keyType === 'FromDateToDate'">
+        <input
+          #imageCalendar
+          type="text"
+          ngxDaterangepickerMd
+          matInput
+          [(ngModel)]="selectedDateToDate"
+          (change)="choosedDate($event)"
+          [locale]="{
+            applyLabel: 'Apply',
+            format: 'DD/MM/YYYY',
+            cancelLabel: 'Cancel',
+            separator: '-',
+            customRangeLabel: 'Tùy chỉnh'
+          }"
+          [showCustomRangeLabel]="true"
+          [alwaysShowCalendars]="true"
+          [showCancel]="true"
+          [ranges]="ranges"
+          [linkedCalendars]="true"
+          [keepCalendarOpeningWithRange]="true"
+          startKey="from_date"
+          endKey="to_date"
+          class="form-control form-control-solid"
+          placeholder="Chọn thời gian"
+          style="height: 36px; border-radius: 8px; border: 1.5px solid #dddddd; z-index: 2; padding-right: 30px"
+        />
+
+        <a (click)="imageCalendar.click()">
+          <img
+            src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/calendar.svg"
+            alt=""
+            width="auto"
+            height="auto"
+            style="z-index: 0"
+            class="position-absolute icon-calendar"
+          />
+        </a>
+      </div>
+
+      <div class="input-promotion" *ngIf="keyType === 'Textarea'">
+        <textarea style="margin: 8px 0" [(ngModel)]="description" (ngModelChange)="changeEvent($event)" [disabled]="disabled" [placeholder]="placeholder"></textarea>
+      </div>
+      <div class="input-promotion card" *ngIf="keyType === 'Textarea_phone'">
+        <div class="item" style="margin-left: 8px">
+          <a (click)="file.click()">
+            <img src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/product/upload_file.svg" alt="" width="auto" height="auto" />
+            <input type="file" accept=".xlsx" #file (change)="onFileChange($event)" />
+          </a>
+          {{ fileImportName ? fileImportName : 'Import Excel' }}
+          <a download href="../../../../../assets/file/template_mau_import_sdt.xlsx">
+            <img src="https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/product/upload_file.svg" alt="" width="auto" height="auto" style="transform: rotate(180deg)" />
+            <input type="file" accept=".xlsx" #file (change)="onFileChange($event)" />
+          </a>
+          Tải file mẫu
+        </div>
+        <div class="create-phone-history">
+          <textarea style="margin: 8px 0" [(ngModel)]="description" [maxlength]="11000" (change)="changeEvent($event)" [placeholder]="placeholder"></textarea>
+        </div>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Radio'">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-1 row-cols-xl-2 g-9">
+          <!--begin::Col-->
+          <div class="col" *ngFor="let itemRadio of dataCustom">
+            <!--begin::Option-->
+            <label
+              class="btn btn-outline btn-outline-dashed btn-outline-default d-flex text-start p-6"
+              [ngClass]="itemRadio.value === this.valueInput ? 'active' : ''"
+              (click)="valueInput = itemRadio.value"
+              data-kt-button="true"
+              for="use_fgold{{ itemRadio.value }}"
+            >
+              <span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+                <input
+                  [checked]="itemRadio.value === this.valueInput"
+                  type="radio"
+                  class="form-check-input"
+                  id="use_fgold{{ itemRadio.value }}"
+                  name="use_fgold"
+                  [value]="itemRadio.value"
+                  (click)="changeEvent($event)"
+                />
+              </span>
+              <span class="ms-8">
+                <span class="fs-4 fw-bolder text-gray-800 d-block">{{ itemRadio.name }} </span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!---->
+      <div class="input-promotion" *ngIf="keyType === 'Select Address'">
+        <ng-select
+          class="calculation-type"
+          [items]="dataCustom"
+          bindLabel="name"
+          bindValue="name"
+          [placeholder]="'Chọn ' + placeholder"
+          (change)="changeEvent($event)"
+          [(ngModel)]="selectCustom"
+          [disabled]="disabled"
+        >
+        </ng-select>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'City'">
+        <ng-select
+          class="calculation-type"
+          [items]="dataCity"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          (change)="changeEvent($event)"
+          [(ngModel)]="selectCustom"
+          [disabled]="disabled"
+        >
+        </ng-select>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'District'">
+        <ng-select
+          class="calculation-type"
+          [items]="dataDistrict"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          (change)="changeEvent($event)"
+          [(ngModel)]="selectCustom"
+          [disabled]="disabled"
+        >
+        </ng-select>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Ward'">
+        <ng-select
+          class="calculation-type"
+          [items]="dataWard"
+          bindLabel="name"
+          bindValue="id"
+          [placeholder]="'Chọn ' + placeholder"
+          (change)="changeEvent($event)"
+          [(ngModel)]="selectCustom"
+          [disabled]="disabled"
+        >
+        </ng-select>
+      </div>
+      <div class="input-promotion" *ngIf="keyType === 'Area'">
+        <input
+          [ngStyle]="styleInput"
+          class="form-control"
+          type="text"
+          [placeholder]="placeholder"
+          [(ngModel)]="valueInput"
+          (ngModelChange)="changeEvent($event)"
+          [disabled]="disabled"
+        />
+      </div>
+
+      <!---->
+
+      <div class="input-promotion" *ngIf="keyType === 'Photo'" style="display: grid; justify-content: center">
+        <div class="image-input image-input-empty image-input-outline mb-3" data-kt-image-input="true" style="align-items: center; display: grid; justify-content: center">
+          <div class="image-input-wrapper w-150px h-150px" style="position: relative; border-radius: 16px">
+            <img [src]="!src_img ? 'https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/media/svg/files/blank-image.svg' : src_img" alt="" class="w-100 h-100" />
+            <label
+              class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+              data-kt-image-input-action="change"
+              data-bs-toggle="tooltip"
+              title="Change avatar"
+            >
+              <i class="bi bi-pencil-fill fs-7"></i>
+              <input type="file" name="avatar" accept=".png, .jpg, .jpeg" (change)="changeThumb($event)" #inputThumb />
+              <input type="hidden" name="avatar_remove" />
+            </label>
+            <span
+              class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+              data-kt-image-input-action="cancel"
+              data-bs-toggle="tooltip"
+              title="Cancel avatar"
+            >
+              <i class="bi bi-x fs-2"></i>
+            </span>
+            <span
+              class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+              data-kt-image-input-action="remove"
+              data-bs-toggle="tooltip"
+              title="Remove avatar"
+            >
+              <i class="bi bi-x fs-2"></i>
+            </span>
+          </div>
+        </div>
+        <div class="text-muted fs-7">Chọn ảnh có định dạng: JPG, PNG, JPEG, ảnh không được quá {{ fromComponent === 'debt-brick-modal' ? '1.5MB' : '150Kb' }}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GeneralService} from "../../../_services/general.service";
 
 
@@ -9,7 +8,7 @@ import {GeneralService} from "../../../_services/general.service";
   templateUrl: './table-template-v2.component.html',
   styleUrls: ['./table-template-v2.component.scss'],
 })
-export class TableTemplateComponentV2 implements OnInit {
+export class TableTemplateComponentV2  implements OnInit,AfterViewInit {
 
   constructor(private general: GeneralService, private modalService: NgbModal) {
   }
@@ -36,7 +35,7 @@ export class TableTemplateComponentV2 implements OnInit {
   @Input() tableTHEvent: any;
   @Input() page: any;
   @Input() addData: any = false;
-  @Input() dataContent: any = [];
+  dataContent: any = [];
   @Input() offset = 0;
   @Input() valueInput: any = '';
   @Input() sort: any = '';
@@ -157,91 +156,14 @@ export class TableTemplateComponentV2 implements OnInit {
   }
 
   openEvent(str: any, data: any, key: any, count?: any): any {
-    let a = {};
-    if (this.keyCSKH === 'fconnect-report') {
-      a = {
-        str,
-        data,
-        key,
-        key2: data['Tình trạng đơn hàng'],
-        key3: data['Thành tiền sau khuyến mãi'],
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'delivery-customer-schedule-date') {
-      a = {
-        str,
-        data,
-        key,
-        key2: data['Shipper note'],
-        key3: data['KH phản ánh'],
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'manage-list-game') {
-      if (str === 'state' || str === 'coming_soon') {
-        a = {
-          str,
-          data,
-          key,
-          p: this.p,
-        };
-      } else {
-        a = {
-          str,
-          data,
-          key: data.game_id,
-          p: this.p,
-        };
-      }
-    } else if (this.keyCSKH === 'landing-ldp') {
-      a = {
-        str,
-        data,
-        key,
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'list-program-promotion') {
-      a = {
-        str,
-        data,
-        key,
-        count,
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'qr-code') {
-      a = {
-        str,
-        data,
-        key,
-        count,
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'crm-chain-seller') {
-      a = {
-        str,
-        data,
-        key: data['Mã khách hàng'],
-        count,
-        p: this.p,
-      };
-    } else if (this.keyCSKH === 'telesale-campaign') {
-      this.keyValueTable = key;
-      this.valueTable.emit(this.keyValueTable);
-      a = {
-        str,
-        data,
-        key,
-        count,
-        p: this.p,
-      };
-    } else {
-      a = {
-        str,
-        data,
-        key,
-        count,
-        p: this.p,
-      };
-    }
+    let a = {
+      str,
+      data,
+      key,
+      count,
+      p: this.p,
+    };
+
     this.openEvent2.emit(a);
   }
 
@@ -256,11 +178,24 @@ export class TableTemplateComponentV2 implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkTableConfig();
+
     if (this.sort !== '') {
       this.setOrder(this.sort);
       this.setOrder(this.sort);
     }
+    setTimeout(()=>{
+      this.checkTableConfig();
+    },1000)
+  }
+  ngAfterViewInit(): void{
+    this.tableContentEvent.subscribe((event: any) => {
+      this.dataContent = event;
+      console.log(11, this.dataContent);
+    });
+    this.tableTHEvent.subscribe((event: any) => {
+      this.tableTH = event;
+      console.log(22, this.tableTH);
+    });
   }
 
   openPopup(type: any, id?: any): any {
@@ -321,60 +256,13 @@ export class TableTemplateComponentV2 implements OnInit {
     if (this.tableContentEvent) {
       this.tableContentEvent.subscribe((event: any) => {
         this.dataContent = event;
-
-        if (this.keyCSKH === 'fconnect-report') {
-          const listPhone = this.dataContent.map((i: any) => {
-            if (i['Số điện thoại']) {
-              return i['Số điện thoại'];
-            }
-          });
-          const dictionary = {} as any;
-          // let listPhoneDouble = [] as any;
-          listPhone.forEach((i: any) => {
-            if (dictionary[i]) {
-              dictionary[i] += 1;
-            } else {
-              dictionary[i] = 1;
-            }
-          });
-          for (const i in dictionary) {
-            if (dictionary.hasOwnProperty(i)) {
-              if (dictionary[i] >= 2) {
-                this.listPhoneDouble.push(i);
-              }
-            }
-          }
-
-          this.listPhoneDoubleColor = this.listPhoneDouble.map((phone: any) => {
-            const color = this.listColor[Math.floor(Math.random() * this.listColor.length)];
-            return { phone, color };
-          });
-        }
-
+        console.log(11, this.dataContent);
       });
     }
     if (this.tableTHEvent) {
       this.tableTHEvent.subscribe((event: any) => {
         this.tableTH = event;
-        let list = [] as any;
-        let count = 0 as any;
-        list = this.tableTH.map((i: any) => {
-          if (i.title === 'Thời gian bắt đầu' || i.title === 'Thời gian kết thúc' || i.title === 'Trạng thái chương trình') {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        list.filter((j: any) => {
-          if (j === 1) {
-            count += 1;
-          }
-        });
-        if (count === 3) {
-          this.keyShowStatePromotion = true;
-        } else {
-          this.keyShowStatePromotion = false;
-        }
+        console.log(22, this.tableTH);
       });
     }
     if (this.page) {

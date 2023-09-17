@@ -1,24 +1,24 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SpinnerLayoutComponent } from './spinner-layout/spinner-layout.component';
-import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { MatMenuModule } from '@angular/material/menu';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SpinnerLayoutComponent} from './spinner-layout/spinner-layout.component';
+import {NgxDaterangepickerMd} from 'ngx-daterangepicker-material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {MatMenuModule} from '@angular/material/menu';
 
 import {
   NgbModule,
   NgbDateParserFormatter,
   NgbDatepickerModule,
   NgbDropdown,
-  NgbTimepickerModule,
+  NgbTimepickerModule, NgbActiveModal,
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogService} from './confirmation-dialog/confirmation-dialog.service';
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
 import {TableTemplateComponentV2} from "./table-template-v2/table-template-v2.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {FormatOrderNumberPipe} from "./_pipe/format-order-number.pipe";
@@ -26,6 +26,28 @@ import {FormatDatePipe} from "./_pipe/format-date.pipe";
 import {FormatLanguagePromotionPipe} from "./_pipe/format-language-promotion";
 import {FormatNumberPipe} from "./_pipe/format-number.pipe";
 import {OrderModule} from "ngx-order-pipe";
+import {FormInputComponent} from "./form-input/form-input.component";
+
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
+import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import {FormatDatepicker} from "../../_helpers/format-datepicker";
+export const MOMENT_DATETIME_WITH_SECONDS_FORMAT = 'DD-MM-YYYY  HH:mm:ss';
+const CUSTOM_MOMENT_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: MOMENT_DATETIME_WITH_SECONDS_FORMAT,
+  },
+  display: {
+    dateInput: MOMENT_DATETIME_WITH_SECONDS_FORMAT,
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     SpinnerLayoutComponent,
@@ -34,12 +56,13 @@ import {OrderModule} from "ngx-order-pipe";
     FormatOrderNumberPipe,
     FormatDatePipe,
     FormatLanguagePromotionPipe,
-    FormatNumberPipe
+    FormatNumberPipe,
+    FormInputComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
+    ReactiveFormsModule,
     NgxSpinnerModule,
     NgSelectModule,
     NgxDaterangepickerMd.forRoot({
@@ -51,6 +74,12 @@ import {OrderModule} from "ngx-order-pipe";
     Ng2SearchPipeModule,
     NgxPaginationModule,
     OrderModule,
+    NgxMatTimepickerModule,
+    NgxMatDatetimePickerModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    NgxMatMomentModule,
   ],
   providers: [
     ConfirmationDialogService,
@@ -58,7 +87,18 @@ import {OrderModule} from "ngx-order-pipe";
     FormatOrderNumberPipe,
     FormatDatePipe,
     FormatLanguagePromotionPipe,
-    FormatNumberPipe
+    FormatNumberPipe,
+    { provide: NgbDateParserFormatter, useClass: FormatDatepicker },
+    ConfirmationDialogService,
+    NgbDropdown,
+    MatDatepickerModule,
+    NgbActiveModal,
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } },
+    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_MOMENT_FORMATS },
+    {
+      provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: false },
+    },
   ],
   exports: [
     Ng2SearchPipeModule,
@@ -67,7 +107,12 @@ import {OrderModule} from "ngx-order-pipe";
     FormatOrderNumberPipe,
     FormatDatePipe,
     FormatLanguagePromotionPipe,
-    FormatNumberPipe
+    FormatNumberPipe,
+    FormInputComponent,
+    TableTemplateComponentV2,
   ],
 })
-export class SharedModule {}
+export class SharedModule {
+}
+
+

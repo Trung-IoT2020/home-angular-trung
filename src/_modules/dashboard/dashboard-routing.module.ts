@@ -4,6 +4,8 @@ import {DashboardHomeComponent} from "./dashboard-home/dashboard-home.component"
 import {HomeComponent} from "./dashboard-home/screen/home/home.component";
 import {HomeCustomerComponent} from "./dashboard-home/screen/home-customer/home-customer.component";
 import {ManageHistoryComponent} from "./dashboard-home/screen/manage-history/manage-history.component";
+import {ManageDeviceComponent} from "./dashboard-home/screen/manage-device/manage-device.component";
+import {ChartDeviceComponent} from "./dashboard-home/screen/chart-device/chart-device.component";
 
 
 const routes: Routes = [
@@ -25,7 +27,11 @@ const routes: Routes = [
       },
       {
         path: 'device',
-        component: ManageHistoryComponent,
+        component: ManageDeviceComponent,
+      },
+{
+        path: 'chart-device',
+        component: ChartDeviceComponent,
       },
 
     ],

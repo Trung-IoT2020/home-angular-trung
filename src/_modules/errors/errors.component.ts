@@ -1,5 +1,5 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -9,8 +9,15 @@ import { Router } from '@angular/router';
 })
 export class ErrorsComponent implements OnInit {
   @HostBinding('class') class = 'd-flex flex-column flex-root';
-  constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  constructor(private router: Router) {
+  }
+
+  ngOnInit(): void {
+  }
+
+  goto(): any {
+    this.router.navigate(['/home']);
+  }
 
 }

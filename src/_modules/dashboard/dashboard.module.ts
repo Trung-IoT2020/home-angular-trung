@@ -12,6 +12,15 @@ import {HomeCustomerComponent} from "./dashboard-home/screen/home-customer/home-
 import {ManageDeviceComponent} from "./dashboard-home/screen/manage-device/manage-device.component";
 import {ManageHistoryComponent} from "./dashboard-home/screen/manage-history/manage-history.component";
 import {AddDeviceModalComponent} from "./dashboard-home/screen/add-device-modal/add-device-modal.component";
+import {FormsModule} from "@angular/forms";
+import {NgxPaginationModule} from "ngx-pagination";
+import {OrderModule} from "ngx-order-pipe";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgSelectModule} from "@ng-select/ng-select";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+import {MatNativeDateModule} from "@angular/material/core";
+import {ChartDeviceComponent} from "./dashboard-home/screen/chart-device/chart-device.component";
 
 
 @NgModule({
@@ -24,12 +33,21 @@ import {AddDeviceModalComponent} from "./dashboard-home/screen/add-device-modal/
     HomeCustomerComponent,
     ManageDeviceComponent,
     ManageHistoryComponent,
-    AddDeviceModalComponent
+    AddDeviceModalComponent,
+    ChartDeviceComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     DashboardRoutingModule,
+    FormsModule,
+    NgxPaginationModule,
+    OrderModule,
+    NgbModule,
+    NgSelectModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
   ],
 })
 export class DashboardModule {

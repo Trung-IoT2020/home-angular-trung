@@ -1,0 +1,101 @@
+<div class='card-header-top'>
+  <div class="row-flex">
+    <div class="col-flex-2">
+      <div class="mb-2 fv-row">
+        <label class="form-label">Chọn gateway:
+        </label>
+        <div class="input-promotion">
+          <select class="form-select w-200">
+            <ng-container *ngFor="let i of listNote">
+              <option [value]="i.id">{{i.name}}</option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-flex-2">
+      <div class="mb-2 fv-row">
+        <label class="form-label">Chọn thời gian bắt đầu:
+        </label>
+        <div class="input-promotion">
+          <div class="input-promotion-date">
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate" [max]="toDate"
+                   (ngModelChange)="changeEvent($event,'fromDate')" style="height: 36px; border: none;color: #5A6A85;"/>
+            <mat-datepicker-toggle matIconSuffix [for]="picker1" class="general-height-date"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 class="general-height-date"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-flex-2">
+      <div class="mb-2 fv-row">
+        <label class="form-label">Chọn thời gian kết thúc:
+        </label>
+        <div class="input-promotion">
+          <div class="input-promotion-date">
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate" [min]="fromDate"
+                   (ngModelChange)="changeEvent($event,'toDate')" style="height: 36px; border: none;color: #5A6A85;"/>
+            <mat-datepicker-toggle matIconSuffix [for]="picker2" class="general-height-date"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 class="general-height-date"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-flex-2">
+      <div class="mb-2 fv-row">
+        <label class="form-label">
+          Kết quả:
+        </label>
+        <div class="input-promotion">
+          <button class="btn btn-primary">Tìm kiếm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='card card-flush'>
+  <div class='card-header align-items-center'>
+    <div class='card-title'>
+      <!--begin::Search-->
+      <div class='d-flex align-items-center position-relative my-1 w-250px'>
+        <!--        &lt;!&ndash;begin::Svg Icon | path: icons/duotune/general/gen021.svg&ndash;&gt;-->
+        <!--        <span class='svg-icon svg-icon-1 position-absolute ms-4'>-->
+        <!--            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>-->
+        <!--              <rect opacity='0.5' x='17.0365' y='15.1223' width='8.15546' height='2' rx='1'-->
+        <!--                    transform='rotate(45 17.0365 15.1223)' fill='black'/>-->
+        <!--              <path-->
+        <!--                d='M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z'-->
+        <!--                fill='black'-->
+        <!--              />-->
+        <!--            </svg>-->
+        <!--          </span>-->
+        <!--        <input-->
+        <!--          [(ngModel)]='searchText'-->
+        <!--          type='search'-->
+        <!--          data-kt-ecommerce-category-filter='search'-->
+        <!--          class='form-control form-control-solid w-200px ps-14'-->
+        <!--          placeholder='Tìm kiếm'-->
+        <!--        />-->
+      </div>
+    </div>
+    <div class='card-toolbar' style='gap: 10px; background-color: #f5f8fa; padding: 4px;border-radius: 8px;'>
+      <button mat-button [matMenuTriggerFor]='menu'
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action ml-3'>
+        <span>Hành động</span>
+        <img src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg' alt=''
+             class='w-15px ml-1'/>
+      </button>
+      <mat-menu #menu='matMenu'>
+        <a mat-menu-item (click)='exportFile()'>Export Excel</a>
+      </mat-menu>
+    </div>
+
+  </div>
+  <div class='card-body pt-0'>
+    <div style="width:100%;">
+      <canvas id="myChart" width="700" height="250" #mychart></canvas>
+    </div>
+  </div>
+</div>
+
+<app-spinner-layout></app-spinner-layout>
