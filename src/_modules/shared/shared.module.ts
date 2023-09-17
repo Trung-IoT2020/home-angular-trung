@@ -19,19 +19,23 @@ import {
 import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component';
 import {ConfirmationDialogService} from './confirmation-dialog/confirmation-dialog.service';
 import {Ng2SearchPipeModule} from 'ng2-search-filter';
-import {TableTemplateComponentV2} from "./table-template-v2/table-template-v2.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {FormatOrderNumberPipe} from "./_pipe/format-order-number.pipe";
 import {FormatDatePipe} from "./_pipe/format-date.pipe";
 import {FormatLanguagePromotionPipe} from "./_pipe/format-language-promotion";
 import {FormatNumberPipe} from "./_pipe/format-number.pipe";
 import {OrderModule} from "ngx-order-pipe";
-import {FormInputComponent} from "./form-input/form-input.component";
 
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
-import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule} from '@angular/material-moment-adapter';
+import {
+  NGX_MAT_DATE_FORMATS,
+  NgxMatDateFormats,
+  NgxMatDatetimePickerModule,
+  NgxMatTimepickerModule
+} from '@angular-material-components/datetime-picker';
+import {NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, NgxMatMomentModule} from '@angular-material-components/moment-adapter';
 import {FormatDatepicker} from "../../_helpers/format-datepicker";
+
 export const MOMENT_DATETIME_WITH_SECONDS_FORMAT = 'DD-MM-YYYY  HH:mm:ss';
 const CUSTOM_MOMENT_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -47,17 +51,16 @@ const CUSTOM_MOMENT_FORMATS: NgxMatDateFormats = {
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
 
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
+
 @NgModule({
   declarations: [
     SpinnerLayoutComponent,
     ConfirmationDialogComponent,
-    TableTemplateComponentV2,
     FormatOrderNumberPipe,
     FormatDatePipe,
     FormatLanguagePromotionPipe,
     FormatNumberPipe,
-    FormInputComponent,
   ],
   imports: [
     CommonModule,
@@ -88,16 +91,16 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormatDatePipe,
     FormatLanguagePromotionPipe,
     FormatNumberPipe,
-    { provide: NgbDateParserFormatter, useClass: FormatDatepicker },
+    {provide: NgbDateParserFormatter, useClass: FormatDatepicker},
     ConfirmationDialogService,
     NgbDropdown,
     MatDatepickerModule,
     NgbActiveModal,
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } },
-    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_MOMENT_FORMATS },
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: false}},
+    {provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_MOMENT_FORMATS},
     {
       provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-      useValue: { useUtc: false },
+      useValue: {useUtc: false},
     },
   ],
   exports: [
@@ -108,8 +111,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormatDatePipe,
     FormatLanguagePromotionPipe,
     FormatNumberPipe,
-    FormInputComponent,
-    TableTemplateComponentV2,
   ],
 })
 export class SharedModule {
