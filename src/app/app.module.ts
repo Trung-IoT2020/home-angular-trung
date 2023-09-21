@@ -7,7 +7,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ClipboardModule} from "ngx-clipboard";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {JwtInterceptor, JwtModule} from "@auth0/angular-jwt";
-import {EnvironmentsService} from "../_services/environments.service";
 import {MatInputModule} from "@angular/material/input";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatIconModule} from "@angular/material/icon";
@@ -34,17 +33,7 @@ import {SharedModule} from "../_modules/shared/shared.module";
       },
     }),
   ],
-  providers: [
-    CookieService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    EnvironmentsService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (envService: EnvironmentsService) => () => envService.init(),
-      deps: [EnvironmentsService],
-      multi: true,
-    },
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

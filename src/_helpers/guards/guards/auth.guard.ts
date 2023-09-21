@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
@@ -6,10 +6,9 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {GeneralService} from "../../../_services/general.service";
-import {AuthService} from "../../../_services/auth.service";
-
+import {NathiService} from "../../../_services/nathi.service";
 
 
 @Injectable({
@@ -17,11 +16,13 @@ import {AuthService} from "../../../_services/auth.service";
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
+    private authService: NathiService,
     private router: Router,
     private general: GeneralService,
     // private confirmDialog: ConfirmationDialogService
-  ) {}
+  ) {
+  }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot

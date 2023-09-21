@@ -14,6 +14,10 @@ const routes: Routes = [
     component: DashboardHomeComponent,
     children: [
       {
+        path: 'dashboard',
+        component: HomeComponent,
+      },
+      {
         path: 'home',
         component: HomeComponent,
       },
@@ -29,7 +33,7 @@ const routes: Routes = [
         path: 'device',
         component: ManageDeviceComponent,
       },
-{
+      {
         path: 'chart-device',
         component: ChartDeviceComponent,
       },
