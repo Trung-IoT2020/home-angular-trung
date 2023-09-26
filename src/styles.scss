@@ -25,6 +25,12 @@ a {
   display: block;
 }
 
+.btn-custom {
+  cursor: pointer;
+  background: #f5f8fa;
+  border: 1px solid #ccc;
+}
+
 .map-wrapper {
   position: relative;
   width: 100%;
@@ -65,7 +71,8 @@ a {
 .w-250px {
   width: 250px !important;
 }
-.w-200{
+
+.w-200 {
   width: 200px !important;
 }
 
@@ -190,6 +197,7 @@ btn {
     background-repeat: no-repeat;
   }
 }
+
 .ng-select {
   width: 100%;
 }

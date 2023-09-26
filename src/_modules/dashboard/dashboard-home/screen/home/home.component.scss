@@ -7,9 +7,10 @@
   overflow-y: auto;
   height: 500px;
   margin: auto;
-  justify-content: center;
+  justify-content: flex-start;
 
   .item-content-gateway {
+    height: 60px;
     flex-basis: calc(10% - 10px); /* Adjust the width as needed, accounting for margins */
     margin: 8px; /* Adjust as needed */
     text-align: center; /* Center the content */
@@ -36,6 +37,24 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       width: 100px;
+    }
+
+    .item-content-gateway-tick {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 15%;
+      right: 0;
+    }
+
+    .active-n {
+      background-color: #0b856f;
+    }
+
+    .fail-n {
+      background-color: red;
     }
   }
 }

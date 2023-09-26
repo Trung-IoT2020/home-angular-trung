@@ -4,6 +4,8 @@ import {ConfirmationDialogService} from "../../../../shared/confirmation-dialog/
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
+import {NathiService} from "../../../../../_services/nathi.service";
+import {AddDeviceModalComponent} from "../add-device-modal/add-device-modal.component";
 
 @Component({
   selector: 'app-manage-device',
@@ -64,248 +66,16 @@ export class ManageDeviceComponent implements OnInit {
     'Tạm tính',
     'Tổng tiền',
   ];
-  search(e: any): any {
-    console.log(e);
-    this.searchText = e;
-    this.p = 1;
-    this.page.emit(this.p);
-    this.getAPIListDevice(e);
-  }
 
-  dataContent: any = [
-    {
-      "Tên note": "Note_1",
-      "Thông số 1": 1,
-      "Thông số 2": 1,
-      "Thông số 3": 1,
-      "Thông số 4": 1,
-      "Thông số 5": 1,
-      "Thông số 6": 1,
-      "Thông số 7": 1,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_2",
-      "Thông số 1": 2,
-      "Thông số 2": 2,
-      "Thông số 3": 2,
-      "Thông số 4": 2,
-      "Thông số 5": 2,
-      "Thông số 6": 2,
-      "Thông số 7": 2,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_3",
-      "Thông số 1": 3,
-      "Thông số 2": 3,
-      "Thông số 3": 3,
-      "Thông số 4": 3,
-      "Thông số 5": 3,
-      "Thông số 6": 3,
-      "Thông số 7": 3,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_4",
-      "Thông số 1": 4,
-      "Thông số 2": 4,
-      "Thông số 3": 4,
-      "Thông số 4": 4,
-      "Thông số 5": 4,
-      "Thông số 6": 4,
-      "Thông số 7": 4,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_5",
-      "Thông số 1": 5,
-      "Thông số 2": 5,
-      "Thông số 3": 5,
-      "Thông số 4": 5,
-      "Thông số 5": 5,
-      "Thông số 6": 5,
-      "Thông số 7": 5,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_6",
-      "Thông số 1": 6,
-      "Thông số 2": 6,
-      "Thông số 3": 6,
-      "Thông số 4": 6,
-      "Thông số 5": 6,
-      "Thông số 6": 6,
-      "Thông số 7": 6,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_7",
-      "Thông số 1": 7,
-      "Thông số 2": 7,
-      "Thông số 3": 7,
-      "Thông số 4": 7,
-      "Thông số 5": 7,
-      "Thông số 6": 7,
-      "Thông số 7": 7,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_8",
-      "Thông số 1": 8,
-      "Thông số 2": 8,
-      "Thông số 3": 8,
-      "Thông số 4": 8,
-      "Thông số 5": 8,
-      "Thông số 6": 8,
-      "Thông số 7": 8,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_9",
-      "Thông số 1": 9,
-      "Thông số 2": 9,
-      "Thông số 3": 9,
-      "Thông số 4": 9,
-      "Thông số 5": 9,
-      "Thông số 6": 9,
-      "Thông số 7": 9,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_10",
-      "Thông số 1": 10,
-      "Thông số 2": 10,
-      "Thông số 3": 10,
-      "Thông số 4": 10,
-      "Thông số 5": 10,
-      "Thông số 6": 10,
-      "Thông số 7": 10,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_11",
-      "Thông số 1": 11,
-      "Thông số 2": 11,
-      "Thông số 3": 11,
-      "Thông số 4": 11,
-      "Thông số 5": 11,
-      "Thông số 6": 11,
-      "Thông số 7": 11,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_12",
-      "Thông số 1": 12,
-      "Thông số 2": 12,
-      "Thông số 3": 12,
-      "Thông số 4": 12,
-      "Thông số 5": 12,
-      "Thông số 6": 12,
-      "Thông số 7": 12,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_13",
-      "Thông số 1": 13,
-      "Thông số 2": 13,
-      "Thông số 3": 13,
-      "Thông số 4": 13,
-      "Thông số 5": 13,
-      "Thông số 6": 13,
-      "Thông số 7": 13,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_14",
-      "Thông số 1": 14,
-      "Thông số 2": 14,
-      "Thông số 3": 14,
-      "Thông số 4": 14,
-      "Thông số 5": 14,
-      "Thông số 6": 14,
-      "Thông số 7": 14,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_15",
-      "Thông số 1": 15,
-      "Thông số 2": 15,
-      "Thông số 3": 15,
-      "Thông số 4": 15,
-      "Thông số 5": 15,
-      "Thông số 6": 15,
-      "Thông số 7": 15,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_16",
-      "Thông số 1": 16,
-      "Thông số 2": 16,
-      "Thông số 3": 16,
-      "Thông số 4": 16,
-      "Thông số 5": 16,
-      "Thông số 6": 16,
-      "Thông số 7": 16,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_17",
-      "Thông số 1": 17,
-      "Thông số 2": 17,
-      "Thông số 3": 17,
-      "Thông số 4": 17,
-      "Thông số 5": 17,
-      "Thông số 6": 17,
-      "Thông số 7": 17,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_18",
-      "Thông số 1": 18,
-      "Thông số 2": 18,
-      "Thông số 3": 18,
-      "Thông số 4": 18,
-      "Thông số 5": 18,
-      "Thông số 6": 18,
-      "Thông số 7": 18,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_19",
-      "Thông số 1": 19,
-      "Thông số 2": 19,
-      "Thông số 3": 19,
-      "Thông số 4": 19,
-      "Thông số 5": 19,
-      "Thông số 6": 19,
-      "Thông số 7": 19,
-      "Thời gian": "17/09/2023"
-    },
-    {
-      "Tên note": "Note_20",
-      "Thông số 1": 20,
-      "Thông số 2": 20,
-      "Thông số 3": 20,
-      "Thông số 4": 20,
-      "Thông số 5": 20,
-      "Thông số 6": 20,
-      "Thông số 7": 20,
-      "Thời gian": "17/09/2023"
-    }
-  ];
-  dataContent2: any = [];
+  dataContent: any = [];
+
   tableTH = [
-    {title: 'Tên note', dataField: 'Tên note', key: 'note_name'},
-    {title: 'Thông số 1', dataField: 'Thông số 1', key: 'value_1'},
-    {title: 'Thông số 2', dataField: 'Thông số 2', key: 'value_2'},
-    {title: 'Thông số 3', dataField: 'Thông số 3', key: 'value_3'},
-    {title: 'Thông số 4', dataField: 'Thông số 4', key: 'value_4'},
-    {title: 'Thông số 5', dataField: 'Thông số 5', key: 'value_5'},
-    {title: 'Thông số 6', dataField: 'Thông số 6', key: 'value_6'},
-    {title: 'Thông số 7', dataField: 'Thông số 7', key: 'value_7'},
-    {title: 'Thời gian', dataField: 'Thời gian', key: 't_start'},
-
+    {title: 'Mã Gateway', dataField: 'Mã Gateway', key: 'id'},
+    {title: 'Tên Gateway', dataField: 'Tên Gateway', key: 'name'},
+    {title: 'Kinh độ', dataField: 'Kinh độ', key: 'lon'},
+    {title: 'Vĩ độ', dataField: 'Vĩ độ', key: 'lat'},
+    {title: 'Trạng thái', dataField: 'trạng thái', key: 'active'},
+    {title: 'Thời gian', dataField: 'Thời gian', key: 't_create'},
   ];
   tableTH2: any = [];
   idSelectedTable1 = '';
@@ -317,6 +87,7 @@ export class ManageDeviceComponent implements OnInit {
               private modalService: NgbModal,
               private router: Router,
               private spinner: NgxSpinnerService,
+              private nathiService: NathiService
   ) {
   }
 
@@ -325,41 +96,82 @@ export class ManageDeviceComponent implements OnInit {
 
   ngOnInit(): void {
 
-    let t_start = new Date();
-    this.callDevice();
-    this.callDevice();
-    this.callDevice();
-
+    this.getAPIListDevice();
 
   }
 
-
-  callDevice(): any {
-    setTimeout(() => {
-      console.log(1);
-    }, 1000)
-  }
 
   keyValueTable: any;
 
   openEvent2(e: any): any {
     console.log(e);
-
-  }
-
-  changePage2(e: any): any {
-    this.p = e;
-  }
-
-  setOrder(value: string): any {
-    if (this.order === value) {
-      this.reverse = !this.reverse;
+    if (e.str === 'edit') {
+      const modalRef = this.modalService.open(AddDeviceModalComponent, {
+        backdrop: 'static',
+        size: 'lg',
+      });
+      modalRef.componentInstance.title = e.data ? 'Cập nhật thông tin Gateway' : 'Thêm Gateway mới';
+      modalRef.componentInstance.dataDetail = e.data ? e.data : undefined;
+      modalRef.componentInstance.modalAction.subscribe((res: any) => {
+        if (res === 'submit') {
+          this.getAPIListDevice();
+        }
+      });
+    } else if (e.str === 'delete') {
+      this.confirmDialog.confirm("Thông báo", 'Dữ liệu trong Gateway này sẽ bị xóa hết! Bạn có chắc là xóa gateway này?', '', 'Đồng ý', 'Hủy bỏ').then((k: any) => {
+        if (k) {
+          this.spinner.show();
+          this.apiDeleteGateway(e.key);
+        }
+      });
+    } else {
+      this.router.navigate(['/note'], {queryParams: {id: e.key}});
     }
-    this.order = value;
+
   }
 
-  getAPIListDevice(e: any): any {
-    console.log(e);
+
+  getAPIListDevice(): any {
+    let listT1 = [] as any;
+    this.spinner.show();
+    this.nathiService.apiGetAllDevice().subscribe((res: any) => {
+      if (res && res.data) {
+        this.spinner.hide();
+        res.data.filter((i: any, index: any) => {
+          if (i) {
+            this.nathiService.apiGetDetailDevice(i.id.id).subscribe((res2: any) => {
+              if (res2 && res2.GW) {
+                listT1.push({
+                  name: res2.GW[0].value.ID,
+                  lat: res2.GW[0].value.P1 ? String(res2.GW[0].value.P1) : '',
+                  lon: res2.GW[0].value.P2 ? String(res2.GW[0].value.P2) : '',
+                  active: res2.GW[0].value.P1 ? 1 : 0,
+                  id: i.id.id,
+                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
+                });
+              } else {
+                listT1.push({
+                  name: i.name,
+                  lat: '',
+                  lon: '',
+                  active: 0,
+                  id: i.id.id,
+                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
+                });
+              }
+            });
+          }
+        });
+        setTimeout(() => {
+          this.dataContent = this.general.formatTable(listT1, this.tableTH);
+          this.tableContentEvent.emit(this.dataContent);
+          this.tableConfigEvent.emit(this.tableTH);
+        }, 500);
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.confirmDialog.confirm('Notification', error.error.message, '', 'Ok', '');
+    });
   }
 
   exportFile(): any {
@@ -369,6 +181,17 @@ export class ManageDeviceComponent implements OnInit {
         this.general.exportExcel(this.dataContent, 'Baocao_thongtin_' + "Device1");
       }
     });
+  }
+
+  apiDeleteGateway(id: any): any {
+    this.nathiService.apiDeleteDevice(id).subscribe((res: any) => {
+      if (res) {
+        this.getAPIListDevice();
+        this.confirmDialog.confirm('Thông báo', 'Đã xóa gateway thành công!', '', 'Đóng', '');
+      }
+    }, (error: any) => {
+      this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '');
+    })
   }
 
 

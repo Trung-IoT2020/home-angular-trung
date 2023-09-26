@@ -1,3 +1,18 @@
+input[type="text"], input[type="number"], input[type="tel"], input[type="email"] {
+  height: 38px;
+  width: 90%;
+  padding: 0 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #5e6278;
+  background-color: #ffffff;
+  background-clip: padding-box;
+  border: 1.5px solid #dddddd;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0.475rem;
+}
 .input {
   width: 100%;
   border: 1.5px solid #dddddd;

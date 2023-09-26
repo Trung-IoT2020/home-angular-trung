@@ -13,6 +13,7 @@ import {
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
 // @ts-ignore
 import {Chart} from "chart.js";
+import {NathiService} from "../../../../../_services/nathi.service";
 
 @Component({
   selector: 'app-chart-device',
@@ -55,23 +56,45 @@ export class ChartDeviceComponent implements OnInit {
       name: "note3",
     }
   ]
+  listGateway: any = [];
 
   constructor(private general: GeneralService,
               private confirmDialog: ConfirmationDialogService,
               private modalService: NgbModal,
               private router: Router,
               private spinner: NgxSpinnerService,
+              private nathiService: NathiService
   ) {
   }
 
+  fromDateF: any;
+  toDateF: any;
 
   changeEvent(e: any, str: any): any {
+    console.log(e);
+    if (str === 'Gateway') {
+      // @ts-ignore
+      this.selectGateway = event.target.value;
+      console.log(this.selectGateway);
+      this.callAPINote(this.selectGateway);
+    } else if (str === 'Node') {
+      // @ts-ignore
+      this.selectNote = event.target.value;
+    } else if (str === 'fromDate') {
+      console.log(e);
+      this.fromDateF = new Date(e._d).getTime();
+      console.log(this.fromDateF);
+    } else {
+      this.toDateF = new Date(e._d).getTime();
+      console.log(this.toDateF);
+    }
 
   }
 
   ngOnInit(): void {
     this.fromDate = this.general.dateFormatYYYYMMDD(new Date());
     this.toDate = this.general.dateFormatYYYYMMDD(new Date());
+    this.callAPIGateway();
   }
 
   canvas: any;
@@ -114,7 +137,7 @@ export class ChartDeviceComponent implements OnInit {
             type: 'linear',
             position: 'bottom',
             ticks: {
-              userCallback: function (tick:any) {
+              userCallback: function (tick: any) {
                 if (tick >= 1000) {
                   return (tick / 1000).toString() + 'km';
                 }
@@ -129,7 +152,7 @@ export class ChartDeviceComponent implements OnInit {
           yAxes: [{
             type: 'linear',
             ticks: {
-              userCallback: function (tick:any) {
+              userCallback: function (tick: any) {
                 return tick.toString() + 'm';
               }
             },
@@ -150,5 +173,70 @@ export class ChartDeviceComponent implements OnInit {
         this.general.exportExcel(this.dataContent, 'Baocao_thongtin_' + "Device1");
       }
     });
+  }
+
+
+  callAPIGateway(): any {
+    let dataGateway = [] as any;
+    this.spinner.show();
+    this.nathiService.apiGetAllDevice().subscribe((res: any) => {
+      if (res && res.data) {
+        this.spinner.hide();
+        res.data.filter((i: any) => {
+          dataGateway.push({
+            id: i.id.id,
+            name: i.name
+          })
+        });
+
+
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '', false);
+    })
+    setTimeout(() => {
+      this.listGateway = dataGateway;
+      console.log(this.listGateway);
+      this.callAPINote(this.listGateway[0].id);
+    }, 500);
+
+  }
+
+  selectGateway: any = '';
+  selectNote: any = '';
+
+  callAPINote(idGateway: any): any {
+    console.log(idGateway);
+    let dataNode = [] as any;
+    this.spinner.show();
+    this.nathiService.apiGetDetailDevice(idGateway).subscribe((res2: any) => {
+      if (res2) {
+        this.spinner.hide();
+        for (const key in res2) {
+          dataNode.push({
+            id: key,
+            name: key
+          })
+        }
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '', false);
+    })
+    this.listNote = dataNode;
+  }
+
+  getDataHistory(): any {
+    this.spinner.show();
+    this.nathiService.apiHistoryDeviceNote(this.selectGateway, this.selectNote, this.fromDateF, this.toDateF).subscribe((res: any) => {
+      if (res) {
+        this.spinner.hide();
+        console.log(res);
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '', false);
+    })
   }
 }

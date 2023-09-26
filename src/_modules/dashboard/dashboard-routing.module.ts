@@ -3,15 +3,16 @@ import {Routes, RouterModule} from '@angular/router';
 import {DashboardHomeComponent} from "./dashboard-home/dashboard-home.component";
 import {HomeComponent} from "./dashboard-home/screen/home/home.component";
 import {HomeCustomerComponent} from "./dashboard-home/screen/home-customer/home-customer.component";
-import {ManageHistoryComponent} from "./dashboard-home/screen/manage-history/manage-history.component";
+import {ManageNoteComponent} from "./dashboard-home/screen/manage-note/manage-note.component";
 import {ManageDeviceComponent} from "./dashboard-home/screen/manage-device/manage-device.component";
 import {ChartDeviceComponent} from "./dashboard-home/screen/chart-device/chart-device.component";
+import {DashboardComponent} from "./dashboard.component";
 
 
 const routes: Routes = [
   {
     path: '',
-    component: DashboardHomeComponent,
+    component: DashboardComponent,
     children: [
       {
         path: 'dashboard',
@@ -26,15 +27,15 @@ const routes: Routes = [
         component: HomeCustomerComponent,
       },
       {
-        path: 'history',
-        component: ManageHistoryComponent,
+        path: 'note',
+        component: ManageNoteComponent,
       },
       {
         path: 'device',
         component: ManageDeviceComponent,
       },
       {
-        path: 'chart-device',
+        path: 'history',
         component: ChartDeviceComponent,
       },
 

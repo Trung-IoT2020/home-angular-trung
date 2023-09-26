@@ -24,7 +24,8 @@ export class NathiService {
     private jwtHelper: JwtHelperService,
     private spinner: NgxSpinnerService,
   ) {
-    this.baseUrl = 'http://103.101.161.120:8080';
+    this.baseUrl = 'http://host.nathi.vn:8080';
+    console.log(this.getToken());
     this.header = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ export class NathiService {
     const exp = new Date(dt.exp).getTime();
     localStorage.setItem('access_info', btoa(unescape(encodeURIComponent(JSON.stringify(dt)))));
     localStorage.setItem('token', token);
-    localStorage.setItem('refreshToken', refreshToken.refreshToken);
+    localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('dataInfo', JSON.stringify(dt));
     this.router.navigate(['/dashboard']);
   }
@@ -79,11 +80,11 @@ export class NathiService {
   getToken() {
     if (this.checkToken()) {
     }
-    return localStorage.getItem('access_token');
+    return localStorage.getItem('token');
   }
 
   getRefreshToken() {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem('refreshToken');
   }
 
   signOut(): any {
@@ -104,5 +105,41 @@ export class NathiService {
   apiForgotPassword(data: any): any {
     const headers = this.header;
     return this.http.post<any>(this.baseUrl + '/api/noauth/resetPasswordByEmail', data, {headers});
+  }
+
+  //show hết tất cả các device(gateway)
+  apiGetAllDevice(): any {
+    const headers = this.header;
+    return this.http.get<any>(this.baseUrl + '/api/tenant/devices?pageSize=100&page=0', {headers});
+  }
+
+  //detail 1 device(gateway)
+  apiGetDetailDevice(id: any): any {
+    const headers = this.header;
+    return this.http.get<any>(this.baseUrl + "/api/plugins/telemetry/DEVICE/" + id + "/values/timeseries?useStrictDataTypes=true", {headers});
+  }
+
+  apiCreateDevice(data: any, idDevice: any): any {
+    const headers = this.header;
+    return this.http.post<any>(this.baseUrl + "/api/device?accessToken=" + "NINAGATE20112019" + idDevice, data, {headers});
+  }
+
+  apiUpdateDevice(data: any): any {
+    const headers = this.header;
+    return this.http.post<any>(this.baseUrl + "/api/device", data, {headers});
+  }
+
+  apiDeleteDevice(idDevice: any): any {
+    const headers = this.header;
+    return this.http.delete<any>(this.baseUrl + "/api/device/" + idDevice, {headers});
+  }
+
+  apiHistoryDeviceNote(idDevice: any, nameNote: any, fromDate: any, toDate: any): any {
+    const headers = this.header;
+    return this.http.get<any>(
+      this.baseUrl + "/api/plugins/telemetry/DEVICE/" + idDevice +
+      "/values/timeseries?limit=1&agg=NONE&orderBy=DESC&useStrictDataTypes=true&keys=" +
+      nameNote + "&startTs=" + fromDate + "&endTs=" + toDate
+      , {headers});
   }
 }

@@ -5,12 +5,24 @@
   </button>
 </div>
 <div class='modal-body' style='padding: 0.5rem 1.75rem;'>
-  ...
-
+  <div class="mb-2 fv-row">
+    <label class="form-label">Nhập mã gateway:
+    </label>
+    <div class="input-promotion">
+      <input type="text" [(ngModel)]="idGateway" placeholder="Nhập mã 108618320-5a17...." [disabled]="isDisable">
+    </div>
+  </div>
+  <div class="mb-2 fv-row">
+    <label class="form-label">Tên gateway:
+    </label>
+    <div class="input-promotion">
+      <input type="text" [(ngModel)]="nameGateway" placeholder="Nhập tên gateway bạn muốn....">
+    </div>
+  </div>
 </div>
 
 <div class='modal-footer'>
-  <button type='button' class='btn btn-primary' [disabled]="numberPhone === '' ||
-!idSelectedTable1" (click)='submit(0)'> Lưu
+  <button type='button' class='btn btn-primary' [disabled]="idGateway ==='' || nameGateway  ===''" (click)='this.dataDetail ? submit(1): submit(0)'>
+    {{this.dataDetail ? 'Cập nhật':'Lưu'}}
   </button>
 </div>

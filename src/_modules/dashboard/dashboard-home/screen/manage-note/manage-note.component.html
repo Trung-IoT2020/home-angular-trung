@@ -1,7 +1,9 @@
 <div class='card card-flush'>
   <div class='card-header align-items-center'>
     <div class='card-title'>
+      <!--begin::Search-->
       <div class='d-flex align-items-center position-relative my-1 w-250px'>
+        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
         <span class='svg-icon svg-icon-1 position-absolute ms-4'>
             <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
               <rect opacity='0.5' x='17.0365' y='15.1223' width='8.15546' height='2' rx='1'
@@ -21,11 +23,12 @@
         />
       </div>
     </div>
-    <div class='card-toolbar' style='gap: 10px;  padding: 4px;border-radius: 8px;'>
+    <div class='card-toolbar' style='gap: 10px; background-color: #f5f8fa; padding: 4px;border-radius: 8px;'>
       <button mat-button [matMenuTriggerFor]='menu'
-              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action btn-custom ml-3'>
+              class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action ml-3'>
         <span>Hành động</span>
-        <img src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg' alt='' class='w-15px ml-1'/>
+        <img src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg' alt=''
+             class='w-15px ml-1'/>
       </button>
       <mat-menu #menu='matMenu'>
         <a mat-menu-item (click)='exportFile()'>Export Excel</a>
@@ -38,10 +41,11 @@
     [tableContentEvent]="tableContentEvent"
     [itemsPerPage]="this.itemsPerPage"
     [tableClass]="'default-table'"
-    [keyCSKH]="'gateway-table'"
+    [keyCSKH]="'customer-potential'"
     [searchAll]="searchText"
     [p]="this.p"
-    (openEvent2)="openEvent2($event)">
+    (openEvent2)="openEvent2($event)"
+  >
   </app-table-template-v2>
 </div>
 

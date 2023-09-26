@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+  <app-menu></app-menu>
+  <div class="body-wrapper dashboard-home">
+    <app-taskbar></app-taskbar>
+    <div class="container-fluid-custom">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

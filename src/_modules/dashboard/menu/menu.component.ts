@@ -35,21 +35,14 @@ export class MenuComponent implements OnInit {
           type: "TENANT"
         },
         {
-          group: "Device",
+          group: "Home",
           name: "Quản lý thiết bị",
           link: "/device",
           icon: 'ti ti-layout-dashboard',
           type: "TENANT"
         },
         {
-          group: "Device",
-          name: "Xem note hoạt động",
-          link: "/chart-device",
-          icon: 'ti ti-layout-dashboard',
-          type: "TENANT"
-        },
-        {
-          group: "History",
+          group: "Home",
           name: "Lịch sử",
           link: "/history",
           icon: 'ti ti-layout-dashboard',

@@ -5,9 +5,23 @@
         <label class="form-label">Chọn gateway:
         </label>
         <div class="input-promotion">
-          <select class="form-select w-200">
+          <select class="form-select w-200"  (change)="changeEvent($event, 'Gateway')">
+            <ng-container *ngFor="let i of listGateway" >
+              <option [value]="i.id" >{{i.name}}</option>
+            </ng-container>
+
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-flex-2">
+      <div class="mb-2 fv-row">
+        <label class="form-label">Chọn note:
+        </label>
+        <div class="input-promotion">
+          <select class="form-select w-200"  (change)="changeEvent($event, 'Node')">
             <ng-container *ngFor="let i of listNote">
-              <option [value]="i.id">{{i.name}}</option>
+              <option [value]="i.name">{{i.name}}</option>
             </ng-container>
           </select>
         </div>
@@ -47,7 +61,7 @@
           Kết quả:
         </label>
         <div class="input-promotion">
-          <button class="btn btn-primary">Tìm kiếm</button>
+          <button class="btn btn-primary" (click)="getDataHistory()">Tìm kiếm</button>
         </div>
       </div>
     </div>

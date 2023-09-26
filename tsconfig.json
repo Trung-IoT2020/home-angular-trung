@@ -1,27 +1,61 @@
+///* To learn more about this file see: https://angular.io/config/tsconfig. */
+//{
+//  "compileOnSave": false,
+//  "compilerOptions": {
+//    "skipLibCheck": true,
+//    "baseUrl": "./",
+//    "outDir": "./dist/out-tsc",
+//    "forceConsistentCasingInFileNames": true,
+//    "strict": true,
+//    "noImplicitOverride": true,
+//    "noPropertyAccessFromIndexSignature": true,
+//    "noImplicitReturns": true,
+//    "noFallthroughCasesInSwitch": true,
+//    "sourceMap": true,
+//    "declaration": false,
+//    "downlevelIteration": true,
+//    "experimentalDecorators": true,
+//    "moduleResolution": "node",
+//    "importHelpers": true,
+//    "target": "ES2022",
+//    "module": "ES2022",
+//    "useDefineForClassFields": false,
+//    "lib": [
+//      "ES2022",
+//      "dom"
+//    ]
+//  },
+//  "angularCompilerOptions": {
+//    "enableI18nLegacyMessageIdFormat": false,
+//    "strictInjectionParameters": true,
+//    "strictInputAccessModifiers": true,
+//    "strictTemplates": false
+//  }
+//}
+
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
     "skipLibCheck": true,
+    "noImplicitOverride": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
+    "target": "es2017",
+    "module": "es2020",
     "lib": [
-      "ES2022",
+      "es2018",
       "dom"
     ]
   },
@@ -29,6 +63,9 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": false
+    "strictTemplates": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }
+

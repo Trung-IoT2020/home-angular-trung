@@ -12,11 +12,13 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatIconModule} from "@angular/material/icon";
 import {CookieService} from "ng2-cookies";
 import {SharedModule} from "../_modules/shared/shared.module";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,

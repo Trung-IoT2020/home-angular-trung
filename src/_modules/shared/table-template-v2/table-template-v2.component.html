@@ -1,0 +1,176 @@
+<div class='card-body pt-0'>
+  <div class='table-auto' *ngIf='dataContent && tableTH && dataContent.length>0 &&  tableTH.length >0'>
+    <table
+      class='table align-middle table-row-dashed fs-6 gy-5 gx-5'
+      id='kt_ecommerce_category_table'
+    >
+      <thead>
+      <tr class='text-start text-dark-400 fw-bolder fs-7 text-uppercase gs-0'>
+        <th scope='col' *ngFor='let columnHead of tableTH' class='min-w-200px' style=' padding-right: 1rem;'>
+          <div (click)='setOrder(columnHead.title)'>
+            {{ columnHead.title }}
+            <img
+              *ngIf='columnHead.title === this.order'
+              src='./assets/images/nathi/arrow-up.svg'
+              width='12'
+              height='12'
+              alt=''
+              style="transform:{{
+                this.reverse ? 'rotate(-180deg)' : 'rotate(-0deg)'
+              }}"
+            />
+          </div>
+        </th>
+        <th scope="col" class="min-w-200px" style="padding-right: 1rem;" *ngIf="keyCSKH === 'gateway-table'">
+          <a>
+            Hành động
+          </a>
+
+        </th>
+      </tr>
+      </thead>
+      <tbody class='fw-bold text-gray-600'>
+      <ng-container *ngFor="
+          let columnData of dataContent
+            | filter : searchAll
+            | orderBy : order : reverse
+             | paginate:   {
+       itemsPerPage: itemsPerPage, currentPage: p
+      }; let i = index">
+        <tr>
+          <td
+            *ngFor='let columnHead of tableTH; let j = index' class='align-middle'>
+            <a style="color: #0a58ca" *ngIf="listTitleClick.includes(columnHead.dataField)"
+               (click)="openEvent('detail', columnData,columnData[columnHead.dataField], 1)">
+              {{!columnData[columnHead.dataField] ||
+            columnData[columnHead.dataField] === "" ||
+            columnData[columnHead.dataField] === null
+              ? "0"
+              : (columnData[columnHead.dataField]) }}
+            </a>
+            <div triggers='mouseenter:mouseleave'
+                 placement="{{dataContent.length<4?'left': columnData[columnHead.title] && i>7 &&columnData[columnHead.title].length>18 ?'top' :  'bottom' }}"
+                 [ngbPopover]="columnData[columnHead.title]&&columnData[columnHead.title].length >= 18 ? columnData[columnHead.title] : ''"
+                 *ngIf='listShowCaptionName.includes(columnHead.dataField)'>
+              <a
+                [innerHTML]="
+                  !columnData[columnHead.title] ||
+                  columnData[columnHead.title] === '' ||
+                  columnData[columnHead.title] === null
+                    ? '-'
+                    : columnData[columnHead.title].length >= 18
+                    ? columnData[columnHead.title].slice(0, 18) + '....'
+                    : columnData[columnHead.title]
+                "></a>
+            </div>
+            <div *ngIf='listNumberFormatName.includes(columnHead.dataField)'>
+              {{
+              !columnData[columnHead.dataField] ||
+              columnData[columnHead.dataField] === "" ||
+              columnData[columnHead.dataField] === null
+                ? "0"
+                : (columnData[columnHead.dataField] | formatNumberPipe)
+              }}
+              <span *ngIf="columnHead.dataField.includes('tiền')">đ</span>
+            </div>
+            <!------------------------------------>
+            <a
+              class='one-line'
+              *ngIf="
+                !listTitleClick.includes(columnHead.dataField) &&
+                !listNumberFormatName.includes(columnHead.dataField) &&
+                !listActiveName.includes(columnHead.dataField) &&
+                !listShowCaptionName.includes(columnHead.dataField)
+            "
+              [innerHTML]="
+                columnData[columnHead.title] === null ||
+                columnData[columnHead.title] === ''
+                  ? '-'
+                  : columnData[columnHead.title]
+              "
+            >
+            </a>
+          </td>
+          <td *ngIf="keyCSKH === 'gateway-table'">
+            <div style='
+              align-items: center;
+              text-align: center;
+              display: flex;
+              width: 192px;
+              position: relative;
+              padding: 0;'>
+              <button
+                mat-button
+                [matMenuTriggerFor]='menu'
+                class='btn btn-bg-light btn-active-color-primary d-inline-flex align-items-center button-action btn-custom'>
+                <span>Chức năng</span>
+                <img
+                  src='https://hi-static.fpt.vn/sys/hifpt/pnc_pdx/new-portal/dropdown-icon.svg'
+                  alt=''
+                  class='w-15px ml-1'
+                />
+              </button>
+              <mat-menu #menu='matMenu'>
+                <a
+                  mat-menu-item
+                  (click)="openEvent('detail', columnData, columnData['Mã Gateway'], 1) ">
+                  Xem chi tiết
+                </a>
+                <a
+                  mat-menu-item
+                  (click)="openEvent('edit', columnData, columnData['Mã Gateway'], 2) ">
+                  Chỉnh sửa
+                </a>
+                <a mat-menu-item (click)="openEvent('delete', columnData, columnData['Mã Gateway'], 3) ">
+                  Xóa
+                </a>
+              </mat-menu>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <div
+    class='not-found-data'
+    *ngIf='!dataContent || dataContent.length === 0 || !tableTH || tableTH.length ===0'
+    style='text-align: center; margin: 0'
+  >
+    <div class='row'>
+      <div class='col text-center' style='padding: 5%'>
+        <img
+          src='./assets/images/nathi/no-connection.png'
+          alt=''
+          width='64'
+          height='64'
+        />
+      </div>
+    </div>
+    <i>Không tìm thấy dữ liệu</i>
+  </div>
+
+  <div
+    class='d-flex align-items-center pagination-wrap'
+    *ngIf='dataContent && dataContent.length > 0 &&  tableTH.length >0'
+  >
+  <span *ngIf="searchAll === ''"
+  >Hiển thị
+    {{
+    itemsPerPage * p > dataContent.length
+      ? itemsPerPage * (p - 1) + (dataContent.length % 10)
+      : itemsPerPage * p
+    }}
+    kết quả trên {{ dataContent.length }}
+  </span>
+    <span *ngIf="searchAll !== ''"> </span>
+    <div class='pagination-container'>
+      <pagination-controls
+        (pageChange)='changePage2($event)'
+        previousLabel=''
+        nextLabel=''
+      ></pagination-controls>
+    </div>
+  </div>
+
+</div>

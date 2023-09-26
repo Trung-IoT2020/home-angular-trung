@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  NgZone,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit} from '@angular/core';
 // @ts-ignore
 import * as L from 'leaflet';
 // @ts-ignore
@@ -14,19 +9,20 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ConfirmationDialogService} from "../../../../shared/confirmation-dialog/confirmation-dialog.service";
+import {NathiService} from "../../../../../_services/nathi.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  Location: any = {lat: '10.7370357', lon: '106.7086349'};
+  Location: any = {lat: '10.798939', lon: '106.652915'};
   // Location: any;
-  private map: L.Map;
-  private marker: L.Marker;
+  public map: L.Map;
+  public marker: L.Marker;
 
-  listGateway: any = [];
+  public listGateway: any = [];
 
   constructor(
     private general: GeneralService,
@@ -34,65 +30,61 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private confirmDialog: ConfirmationDialogService,
+    private nathiService: NathiService
   ) {
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.initializeMap();
-      console.log(this.listGateway);
-    }, 1000);
-    let listData = [];
-    for (let i = 1; i <= 20; i++) {
-      listData.push(
-        {
-          name: "Gateway_" + i,
-          lat: String(Number(10.7370357 + (i / 100))),
-          lon: String(Number(106.708634 + (i / 100)))
-        }
-      );
-    }
-    this.listGateway = listData;
+    this.callAPIGetDevice();
 
   }
 
 
-  initializeMap() {
-    const latView = Number(Number(this.Location.lat));
-    const lonView = Number(Number(this.Location.lon));
+  callAPIGetDevice(): any {
+    let listT1 = [] as any;
+    const latView = String(Number(this.Location.lat));
+    const lonView = String(Number(this.Location.lon));
     this.map = map('map').setView([latView, lonView], 19);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-    this.updateMarker(this.Location.lat, this.Location.lon);
+    this.nathiService.apiGetAllDevice().subscribe((res: any) => {
+      if (res && res.data) {
+        const icon = L.icon({
+          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-icon.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-shadow.png',
+          iconAnchor: [20, 41],
+          popupAnchor: [0, -34],
+          tooltipAnchor: [16, -28],
+          shadowSize: [41, 41],
+          shadowAnchor: [12, 41],
+        });
 
-  }
+        res.data.filter((i: any, index: any) => {
+          if (i) {
+            this.nathiService.apiGetDetailDevice(i.id.id).subscribe((res2: any) => {
+              if (res2 && res2.GW) {
 
-  private updateMarker(lat: number, lng: number): void {
-    let listData = [];
-    const icon = L.icon({
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-shadow.png',
-      iconAnchor: [20, 41],
-      popupAnchor: [0, -34],
-      tooltipAnchor: [16, -28],
-      shadowSize: [41, 41],
-      shadowAnchor: [12, 41],
+                this.marker = (L.marker([String(res2.GW[0].value.P1), String(res2.GW[0].value.P2)], {icon}).addTo(this.map));
+                listT1.push({
+                  name: res2.GW[0].value.ID,
+                  lat: res2.GW[0].value.P1 ? String(res2.GW[0].value.P1) : '',
+                  lon: res2.GW[0].value.P2 ? String(res2.GW[0].value.P2) : '',
+                  active: res2.GW[0].value.P1 ? 1 : 0
+                });
+              } else {
+                listT1.push({
+                  name: "Gateway" + (index + 1),
+                  lat: '',
+                  lon: '',
+                  active: 0
+                });
+              }
+            });
+          }
+        });
+        console.log(listT1);
+        this.listGateway = listT1;
+      }
     });
-
-    this.marker = L.marker([Number(Number(lat)), Number(Number(lng))], {icon}).addTo(this.map);
-    for (let i = 1; i <= 20; i++) {
-      listData.push(
-        {
-          name: "Gateway_" + i,
-          lat: String(Number(10.7370357 + (i / 100))),
-          lon: String(Number(106.708634 + (i / 100)))
-        }
-      );
-      this.marker = (L.marker([String(10.7370357 + (i / 100)), String(106.7086349 + (i / 100))], {icon}).addTo(this.map));
-
-    }
-    this.listGateway = listData;
-    this.map.flyTo([this.listGateway[1].lat, this.listGateway[1].lon], 18);
-
   }
 
   gotoDevice(data: any): any {
@@ -112,7 +104,7 @@ export class HomeComponent implements OnInit {
     modalRef.componentInstance.modalAction.subscribe((res: any) => {
       console.log(res);
       if (res === 'submit') {
-        console.log('Đã Gửi!');
+        this.callAPIGetDevice();
         // this.folder_type === 'POTENTIAL_CUSTOMER' ? this.getAPIListCampaign('') : this.getAPIListRecare('');
       }
     });

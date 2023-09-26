@@ -52,6 +52,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
 
 import {MatNativeDateModule} from '@angular/material/core';
+import {TableTemplateComponentV2} from "./table-template-v2/table-template-v2.component";
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     FormatDatePipe,
     FormatLanguagePromotionPipe,
     FormatNumberPipe,
+    TableTemplateComponentV2,
   ],
   imports: [
     CommonModule,
@@ -111,6 +113,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     FormatDatePipe,
     FormatLanguagePromotionPipe,
     FormatNumberPipe,
+    TableTemplateComponentV2,
   ],
 })
 export class SharedModule {
