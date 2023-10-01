@@ -37,9 +37,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLogin = this.nathiService.checkToken();
-    console.log(this.nathiService.checkToken());
     setTimeout(() => {
       if (this.isLogin) {
+        const latView = String(Number(this.Location.lat));
+        const lonView = String(Number(this.Location.lon));
+        this.map = map('map').setView([latView, lonView], 19);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
         this.callAPIGetDevice();
       }
     }, 500)
@@ -50,10 +53,6 @@ export class HomeComponent implements OnInit {
 
   callAPIGetDevice(): any {
     let listT1 = [] as any;
-    const latView = String(Number(this.Location.lat));
-    const lonView = String(Number(this.Location.lon));
-    this.map = map('map').setView([latView, lonView], 19);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
     this.nathiService.apiGetAllDevice().subscribe((res: any) => {
       if (res && res.data) {
         const icon = L.icon({
@@ -94,20 +93,22 @@ export class HomeComponent implements OnInit {
             });
           }
         });
-        console.log(listT1);
-        listT1.filter((k:any)=>{
-          this.marker.bindPopup("<b>" + k.name + "</b><br><a href='./node?id=" + k.id + "'>ID: " + k.id + "</a><br>Thời gian tạo: " + k.t_create).openPopup();
-        })
+        setTimeout(() => {
+          listT1.filter((k: any) => {
+            this.marker.bindPopup("<b>" + k.name + "</b><br><a href='./node?id=" + k.id + "'>ID: " + k.id + "</a><br>Thời gian tạo: " + k.t_create).openPopup();
+          })
+        }, 200)
+
         this.listGateway = listT1;
       }
     });
   }
 
   gotoDevice(data: any): any {
-    console.log(data)
     this.map.flyTo([data.lat, data.lon], 18);
     this.marker.bindPopup("<b>" + data.name + "</b><br><a href='./node?id=" + data.id + "'>ID: " + data.id + "</a><br>Thời gian tạo: " + data.t_create).openPopup();
   }
+
   createDevice(data?: any): any {
     const modalRef = this.modalService.open(AddDeviceModalComponent, {
       backdrop: 'static',
@@ -115,18 +116,10 @@ export class HomeComponent implements OnInit {
     });
     modalRef.componentInstance.title = data ? 'Cập nhật thông tin Gateway' : 'Thêm Gateway mới';
     modalRef.componentInstance.dataCampaignDetail = data ? data : undefined;
-    // modalRef.componentInstance.key = str;
-    // modalRef.componentInstance.folderType = this.folder_type;
-
     modalRef.componentInstance.modalAction.subscribe((res: any) => {
-      console.log(res);
       if (res === 'submit') {
-        setTimeout(() => {
-          this.callAPIGetDevice();
-
-        }, 500);
-
-        // this.folder_type === 'POTENTIAL_CUSTOMER' ? this.getAPIListCampaign('') : this.getAPIListRecare('');
+        console.log(12334555);
+        this.callAPIGetDevice();
       }
     });
   }

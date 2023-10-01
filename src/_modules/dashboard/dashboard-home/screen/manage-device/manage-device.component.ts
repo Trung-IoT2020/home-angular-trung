@@ -63,7 +63,6 @@ export class ManageDeviceComponent implements OnInit {
   keyValueTable: any;
 
   openEvent2(e: any): any {
-    console.log(e);
     if (e.str === 'edit') {
       const modalRef = this.modalService.open(AddDeviceModalComponent, {
         backdrop: 'static',
@@ -142,7 +141,6 @@ export class ManageDeviceComponent implements OnInit {
   }
 
   exportFile(): any {
-    console.log('exportFile');
     this.confirmDialog.confirm('Thông báo', `<br>Bạn muốn tải báo cáo này?<br>`, '', 'Xác nhận', 'Đóng').then((confirm) => {
       if (confirm) {
         this.general.exportExcel(this.dataContent, 'Baocao_thongtin_' + "Device1");
@@ -162,6 +160,18 @@ export class ManageDeviceComponent implements OnInit {
       this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '');
     })
   }
-
+  createDevice(data?: any): any {
+    const modalRef = this.modalService.open(AddDeviceModalComponent, {
+      backdrop: 'static',
+      size: 'lg',
+    });
+    modalRef.componentInstance.title = data ? 'Cập nhật thông tin Gateway' : 'Thêm Gateway mới';
+    modalRef.componentInstance.dataCampaignDetail = data ? data : undefined;
+    modalRef.componentInstance.modalAction.subscribe((res: any) => {
+      if (res === 'submit') {
+        this.getAPIListDevice();
+      }
+    });
+  }
 
 }

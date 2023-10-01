@@ -24,7 +24,6 @@ export class TaskbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(window.location.pathname)
     // @ts-ignore
     let dataMenu = JSON.parse(localStorage.getItem("data-menu"));
     if (dataMenu) {

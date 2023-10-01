@@ -25,13 +25,7 @@ export class NathiService {
     private spinner: NgxSpinnerService,
   ) {
     this.baseUrl = 'http://host.nathi.vn:8080';
-    console.log(this.getToken());
-    this.header = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      "X-Authorization": "Bearer " + this.getToken()
-    };
+
   }
 
   callToken(data: any): any {
@@ -39,6 +33,7 @@ export class NathiService {
     this.apiLogin(JSON.stringify(data)).subscribe((res: any) => {
       if (res) {
         this.spinner.hide();
+        localStorage.setItem('token', res.token);
         this.saveToken(res.token, res.refreshToken);
       }
     }, (error: any) => {
@@ -57,6 +52,7 @@ export class NathiService {
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('dataInfo', JSON.stringify(dt));
     this.router.navigate(['/dashboard']);
+
   }
 
   checkToken() {
@@ -78,8 +74,6 @@ export class NathiService {
   }
 
   getToken() {
-    if (this.checkToken()) {
-    }
     return localStorage.getItem('token');
   }
 
@@ -103,38 +97,80 @@ export class NathiService {
   }
 
   apiForgotPassword(data: any): any {
+    this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.post<any>(this.baseUrl + '/api/noauth/resetPasswordByEmail', data, {headers});
   }
 
   //show hết tất cả các device(gateway)
   apiGetAllDevice(): any {
+    this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.get<any>(this.baseUrl + '/api/tenant/devices?pageSize=100&page=0', {headers});
   }
 
   //detail 1 device(gateway)
   apiGetDetailDevice(id: any): any {
+     this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.get<any>(this.baseUrl + "/api/plugins/telemetry/DEVICE/" + id + "/values/timeseries?useStrictDataTypes=true", {headers});
   }
 
   apiCreateDevice(data: any, idDevice: any): any {
+     this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.post<any>(this.baseUrl + "/api/device?accessToken=" + "NINAGATE20112019" + idDevice, data, {headers});
   }
 
   apiUpdateDevice(data: any): any {
+     this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.post<any>(this.baseUrl + "/api/device", data, {headers});
   }
 
   apiDeleteDevice(idDevice: any): any {
+     this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.delete<any>(this.baseUrl + "/api/device/" + idDevice, {headers});
   }
 
   apiHistoryDeviceNote(idDevice: any, nameNote: any, fromDate: any, toDate: any): any {
+     this.header = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      "X-Authorization": "Bearer " + this.getToken()
+    };
     const headers = this.header;
     return this.http.get<any>(
       this.baseUrl + "/api/plugins/telemetry/DEVICE/" + idDevice +

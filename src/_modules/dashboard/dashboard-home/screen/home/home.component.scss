@@ -11,17 +11,16 @@
 
   .item-content-gateway {
     height: 60px;
-    flex-basis: calc(10% - 10px); /* Adjust the width as needed, accounting for margins */
-    margin: 8px; /* Adjust as needed */
-    text-align: center; /* Center the content */
+    flex-basis: calc(10% - 10px);
+    margin: 8px;
+    text-align: center;
     background-color: #FFF;
     justify-content: center;
     display: block;
     align-items: center;
     position: relative;
     border-radius: 8px;
-    //border: 1px solid #ccc;
-    padding: 16px 4px;
+    padding: 16px 2px;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
 
     img {
@@ -81,6 +80,7 @@
   bottom: 5%;
   right: 5%;
   z-index: 100;
+
   img {
     width: 60px;
   }

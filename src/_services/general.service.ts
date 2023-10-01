@@ -115,11 +115,6 @@ export class GeneralService {
     return result;
   }
 
-  // onPaste(str): any {
-  //   console.log('Str in paste', str);
-  //   return str.replace(/[^a-zA-Z0-9]/g, '');
-  // }
-
   preventMinusCanEnterDot(e: any): any {
     if (e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 190 || e.keyCode === 110) {
       return true;
@@ -198,7 +193,6 @@ export class GeneralService {
     if (!a || a === '') {
       return undefined;
     } else {
-      console.log(a);
       const b = a.split(' ');
       const b1 = b[0].split('/');
       const b2 = b1[2] + '-' + b1[1] + '-' + b1[0] + ' ' + b[1];

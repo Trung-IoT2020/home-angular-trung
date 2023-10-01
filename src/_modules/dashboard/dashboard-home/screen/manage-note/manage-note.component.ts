@@ -82,7 +82,6 @@ export class ManageNoteComponent implements OnInit {
         this.tableTH = [];
         for (const key in res2) {
           if (key.includes('Node')) {
-            console.log(res2[key][0].value);
             // @ts-ignore
             this.listT.push(res2[key][0].value);
             const values = res2[key];
