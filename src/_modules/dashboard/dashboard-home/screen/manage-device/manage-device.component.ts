@@ -78,7 +78,6 @@ export class ManageDeviceComponent implements OnInit {
     } else if (e.str === 'delete') {
       this.confirmDialog.confirm("Thông báo", 'Dữ liệu trong Gateway này sẽ bị xóa hết! Bạn có chắc là xóa gateway này?', '', 'Đồng ý', 'Hủy bỏ').then((k: any) => {
         if (k) {
-          this.spinner.show();
           this.apiDeleteGateway(e.key);
         }
       });
@@ -149,11 +148,11 @@ export class ManageDeviceComponent implements OnInit {
   }
 
   apiDeleteGateway(id: any): any {
-    this.spinner.hide()
+
     this.nathiService.apiDeleteDevice(id).subscribe((res: any) => {
       if (res) {
-        this.spinner.hide()
 
+        this.spinner.hide()
         this.confirmDialog.confirm('Thông báo', 'Đã xóa gateway thành công!', '', 'Đóng', '');
       }
     }, (error: any) => {
