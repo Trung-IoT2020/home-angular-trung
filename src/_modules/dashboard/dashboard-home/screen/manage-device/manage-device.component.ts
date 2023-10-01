@@ -149,17 +149,22 @@ export class ManageDeviceComponent implements OnInit {
   }
 
   apiDeleteGateway(id: any): any {
+    this.spinner.hide()
     this.nathiService.apiDeleteDevice(id).subscribe((res: any) => {
       if (res) {
         this.spinner.hide()
-        this.getAPIListDevice();
+
         this.confirmDialog.confirm('Thông báo', 'Đã xóa gateway thành công!', '', 'Đóng', '');
       }
     }, (error: any) => {
       this.spinner.hide()
       this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '');
     })
+    setTimeout(() => {
+      this.getAPIListDevice();
+    }, 500)
   }
+
   createDevice(data?: any): any {
     const modalRef = this.modalService.open(AddDeviceModalComponent, {
       backdrop: 'static',
