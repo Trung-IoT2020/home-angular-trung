@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {GeneralService} from "../../../../../_services/general.service";
 import {ConfirmationDialogService} from "../../../../shared/confirmation-dialog/confirmation-dialog.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -14,6 +14,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/
 // @ts-ignore
 import {Chart} from "chart.js";
 import {NathiService} from "../../../../../_services/nathi.service";
+import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-chart-device',
@@ -34,6 +35,15 @@ import {NathiService} from "../../../../../_services/nathi.service";
   ],
 })
 export class ChartDeviceComponent implements OnInit {
+  searchText: any = '';
+  tableContentEvent: EventEmitter<object> = new EventEmitter();
+  tableConfigEvent: EventEmitter<object> = new EventEmitter();
+  page: EventEmitter<object> = new EventEmitter();
+  itemsPerPage: any = 10;
+  p: any = 1;
+  tableContent: any = [];
+
+  tableTH = [];
   dataContent: any = [];
   fromDate: any = '';
   minFromDate: any = '';
@@ -57,6 +67,17 @@ export class ChartDeviceComponent implements OnInit {
     }
   ]
   listGateway: any = [];
+  fromDateF: any;
+  toDateF: any;
+  selectedItemNode: any = [];
+  ItemNode: any = [];
+
+  selectedGateway: any;
+  selectedNode: any;
+  listResultMuil: any = [];
+  listResult: any = [];
+  listDataChart: any = {};
+  listDate: any = [];
 
   constructor(private general: GeneralService,
               private confirmDialog: ConfirmationDialogService,
@@ -67,110 +88,194 @@ export class ChartDeviceComponent implements OnInit {
   ) {
   }
 
-  fromDateF: any;
-  toDateF: any;
 
-  changeEvent(e: any, str: any): any {
-    console.log(e);
-    if (str === 'Gateway') {
+  changeEvent(e: any, str: any, list?: any): any {
+    if (str === 'gateway') {
+      this.selectedGateway = e;
+      this.selectedNode = undefined;
+      this.ItemNode = [];
+      this.selectedItemNode = [];
+      this.dataContent = [];
+      this.tableTH = [];
+      this.tableContentEvent.emit([]);
+      this.tableConfigEvent.emit([]);
+      this.listChartMuil = [];
+      this.listChart = [];
+      this.listResultMuil = [];
+      this.listResult = [];
+      this.listDataChart = {};
+      this.listDate = [];
+      this.listN = [];
+      this.listP = [];
+      this.listK = [];
+      this.listM = [];
+      this.listE = [];
+      this.listT = [];
+      this.listH = [];
+      this.callAPINote(this.selectedGateway);
+    } else if (str === 'node') {
       // @ts-ignore
-      this.selectGateway = event.target.value;
-      console.log(this.selectGateway);
-      this.callAPINote(this.selectGateway);
-    } else if (str === 'Node') {
-      // @ts-ignore
-      this.selectNote = event.target.value;
+      this.selectedNode = e;
+      this.ItemNode = [];
+      this.selectedItemNode = [];
+      let listNodeItem = [] as any;
+
+      list.filter((i: any) => {
+        if (i.id === e) {
+          let k = Object.keys(i.value);
+          k.filter((j: any) => {
+            if (j === 'N' || j === 'P' ||
+              j === 'K' || j === 'M' ||
+              j === 'E' || j === 'T' ||
+              j === 'H') {
+              listNodeItem.push({
+                id: j,
+                name: j
+              });
+
+            }
+          })
+          this.ItemNode = listNodeItem;
+          this.selectedItemNode = listNodeItem.map((k: any) => {
+            return {
+              id: k.id,
+              name: k.id
+            };
+          })
+        }
+      })
     } else if (str === 'fromDate') {
-      console.log(e);
       this.fromDateF = new Date(e._d).getTime();
-      console.log(this.fromDateF);
     } else {
       this.toDateF = new Date(e._d).getTime();
-      console.log(this.toDateF);
     }
 
   }
 
+
+  filterDuplicateDates(data: any): any {
+    return this.organizeDataByDate(data)
+  }
+
+  organizeDataByDate(data: any): any {
+    let LT = [] as any;
+    const organizedData = {} as any;
+
+    data.forEach((item: any) => {
+      const date = this.getDateFromTimestamp(item.ts);
+      if (!organizedData[date]) {
+        organizedData[date] = {...item.value};
+      } else {
+        for (const key in item.value) {
+          if (item.value.hasOwnProperty(key) && typeof item.value[key] === 'number') {
+            organizedData[date][key] = Math.max(organizedData[date][key], item.value[key]);
+          }
+        }
+      }
+    });
+    return this.sortDataByDate(organizedData);
+  }
+
+  getDateFromTimestamp(timestamp: number): string {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${day}-${month}-${year}`;
+  }
+
+  sortDataByDate(data: any): any {
+    return Object.keys(data).sort((a, b) => {
+      const dateA = new Date(a.split('-').reverse().join('-')) as any;
+      const dateB = new Date(b.split('-').reverse().join('-')) as any;
+      return dateA - dateB;
+    }).reduce((acc: any, key: any) => {
+      acc[key] = data[key];
+      return acc;
+    }, {});
+  }
+
+
   ngOnInit(): void {
     this.fromDate = this.general.dateFormatYYYYMMDD(new Date());
     this.toDate = this.general.dateFormatYYYYMMDD(new Date());
+    this.fromDateF = new Date().getTime();
+    this.toDateF = new Date().getTime();
     this.callAPIGateway();
   }
 
   canvas: any;
   ctx: any;
   @ViewChild('mychart') mychart: any;
+  listColor: any = [
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#00FFFF',
+    '#800000',
+    '#FF00FF',
+    '#E6E6FA',
+    '#C0C0C0',
+  ];
 
-  ngAfterViewInit() {
-    this.canvas = this.mychart.nativeElement;
-    this.ctx = this.canvas.getContext('2d');
-
-    let myChart = new Chart(this.ctx, {
-      type: 'line',
-
-      data: {
-        datasets: [{
-          label: 'Höhenlinie',
-          backgroundColor: "rgba(255, 99, 132,0.4)",
-          borderColor: "rgb(255, 99, 132)",
-          fill: true,
-          data: [
-            {x: 1, y: 2},
-            {x: 2500, y: 2.5},
-            {x: 3000, y: 5},
-            {x: 3400, y: 4.75},
-            {x: 3600, y: 4.75},
-            {x: 5200, y: 6},
-            {x: 6000, y: 9},
-            {x: 7100, y: 6},
-          ],
-        }]
-      },
-      options: {
-        responsive: true,
-        title: {
-          display: true,
-          text: 'Höhenlinie'
-        },
-        scales: {
-          xAxes: [{
-            type: 'linear',
-            position: 'bottom',
-            ticks: {
-              userCallback: function (tick: any) {
-                if (tick >= 1000) {
-                  return (tick / 1000).toString() + 'km';
-                }
-                return tick.toString() + 'm';
-              }
-            },
-            scaleLabel: {
-              labelString: 'Länge',
-              display: true,
-            }
-          }],
-          yAxes: [{
-            type: 'linear',
-            ticks: {
-              userCallback: function (tick: any) {
-                return tick.toString() + 'm';
-              }
-            },
-            scaleLabel: {
-              labelString: 'Höhe',
-              display: true
-            }
-          }]
-        }
+  chartLine(): any {
+    let ctx: any = document.getElementById('lineChart') as HTMLElement;
+    let listDatasets = [] as any;
+    listDatasets = this.selectedItemNode.map((k: any, index: any) => {
+      return {
+        label: k.id,
+        data: this.listDataChart[k.id],
+        backgroundColor: this.listColor[index],
+        borderColor: this.listColor[index],
+        fill: false,
+        lineTension: 0,
+        radius: 5,
       }
     });
+    //options
+    var options = {
+      responsive: true,
+      title: {
+        display: true,
+        position: 'top',
+        text: 'Dữ liệu node theo thời gian',
+        fontSize: 18,
+        fontColor: '#111',
+      },
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          fontColor: '#333',
+          fontSize: 16,
+        },
+      },
+    };
+    setTimeout(() => {
+      var data = {
+        labels: this.listDate,
+        datasets: listDatasets,
+      };
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+      });
+    }, 200);
+
+
+  }
+
+  ngAfterViewInit() {
+
+
   }
 
   exportFile(): any {
-    console.log('exportFile');
     this.confirmDialog.confirm('Thông báo', `<br>Bạn muốn tải báo cáo này?<br>`, '', 'Xác nhận', 'Đóng').then((confirm) => {
       if (confirm) {
-        this.general.exportExcel(this.dataContent, 'Baocao_thongtin_' + "Device1");
+        this.general.exportExcel(this.dataContent, 'Baocao_dulieu_node_' + this.selectedNode);
       }
     });
   }
@@ -197,27 +302,30 @@ export class ChartDeviceComponent implements OnInit {
     })
     setTimeout(() => {
       this.listGateway = dataGateway;
-      console.log(this.listGateway);
       this.callAPINote(this.listGateway[0].id);
-    }, 500);
+    }, 200);
 
   }
 
   selectGateway: any = '';
   selectNote: any = '';
+  listChartMuil: any = [];
+  listChart: any = [];
 
   callAPINote(idGateway: any): any {
-    console.log(idGateway);
     let dataNode = [] as any;
     this.spinner.show();
     this.nathiService.apiGetDetailDevice(idGateway).subscribe((res2: any) => {
       if (res2) {
         this.spinner.hide();
         for (const key in res2) {
-          dataNode.push({
-            id: key,
-            name: key
-          })
+          if (key.includes('Node')) {
+            dataNode.push({
+              id: key,
+              name: key,
+              value: res2[key][0].value
+            });
+          }
         }
       }
     }, (error: any) => {
@@ -227,16 +335,101 @@ export class ChartDeviceComponent implements OnInit {
     this.listNote = dataNode;
   }
 
-  getDataHistory(): any {
+  listN: any = [];
+  listP: any = [];
+  listK: any = [];
+  listM: any = [];
+  listE: any = [];
+  listT: any = [];
+  listH: any = [];
+
+  getDataHistory(selectedGateway: any, selectedNode: any, fromDateF: any, toDateF: any): any {
     this.spinner.show();
-    this.nathiService.apiHistoryDeviceNote(this.selectGateway, this.selectNote, this.fromDateF, this.toDateF).subscribe((res: any) => {
+    this.nathiService.apiHistoryDeviceNote(selectedGateway,
+      selectedNode,
+      fromDateF,
+      toDateF).subscribe((res: any) => {
       if (res) {
         this.spinner.hide();
-        console.log(res);
+        this.listChartMuil = [];
+        this.listChart = [];
+        this.listResultMuil = [];
+        this.listResult = res[selectedNode];
+        this.listDataChart = {};
+        this.listDate = [];
+        this.listN = [];
+        this.listP = [];
+        this.listK = [];
+        this.listM = [];
+        this.listE = [];
+        this.listT = [];
+        this.listH = [];
+        if (res[selectedNode]) {
+          this.listChartMuil = this.organizeDataByDate(res[selectedNode]);
+          for (const key in this.listChartMuil) {
+            if (this.listChartMuil.hasOwnProperty(key)) {
+              const item = this.listChartMuil[key];
+              this.listN.push(item.N);
+              this.listP.push(item.P);
+              this.listK.push(item.K);
+              this.listM.push(item.M);
+              this.listE.push(item.E);
+              this.listT.push(item.T);
+              this.listH.push(item.H);
+            }
+            this.listDate.push(key);
+          }
+          this.listDataChart = {
+            N: this.listN,
+            P: this.listP,
+            K: this.listK,
+            M: this.listM,
+            E: this.listE,
+            T: this.listT,
+            H: this.listH,
+          }
+
+          // @ts-ignore
+          this.tableTH = Object.keys(this.listResult[0].value).map((k: any) => {
+            return {title: k, dataField: k, key: k};
+          })
+          this.dataContent = this.listResult.map((i: any) => {
+            return i.value
+          })
+          setTimeout(() => {
+            this.tableContentEvent.emit(this.dataContent);
+            this.tableConfigEvent.emit(this.tableTH);
+            this.chartLine();
+          }, 200);
+        } else {
+          this.confirmDialog.confirm('Thông báo', "Không có dữ liệu!", '', 'Đóng', '', false)
+        }
+
       }
     }, (error: any) => {
+      this.tableContentEvent.emit([]);
+      this.tableConfigEvent.emit([]);
+      this.listChartMuil = [];
+      this.listChart = [];
+      this.listResultMuil = [];
+      this.listResult = [];
+      this.listDataChart = {};
+      this.listDate = [];
+      this.listN = [];
+      this.listP = [];
+      this.listK = [];
+      this.listM = [];
+      this.listE = [];
+      this.listT = [];
+      this.listH = [];
       this.spinner.hide();
       this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '', false);
     })
   }
+
+  openEvent2(e: any): any {
+    console.log(e)
+  }
+
 }
+

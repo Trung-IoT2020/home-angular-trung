@@ -25,53 +25,12 @@ export class ManageDeviceComponent implements OnInit {
   order: any = 't_create';
   reverse: any = false;
   sort: any = '';
-  listShowCaptionName: any = [
-    'Mô tả',
-    'Mô tả chương trình',
-    'Chi tiết',
-    'Danh sách sản phẩm',
-    'Hướng dẫn sử dụng',
-    'Chi tiết chương trình',
-    'Tiêu đề phụ',
-    'Ngày không áp dụng',
-    'Nội dung khiếu nại',
-    'Nguồn chuyển thông tin',
-    'Hướng xử lý',
-    'Điều kiện áp dụng',
-    'Địa chỉ', 'Tên Game', 'Tên vật phẩm', 'Kết quả xử lý', 'Shipper note',
-    'Ghi chú',
-    'Ghi chú của khách hàng',
-    'Ghi chú của nhân viên',
-  ];
-  listActiveName: any = [
-    'Hoạt động',
-    'On/Off',
-  ];
-  listNumberFormatName: any = [
-    'Số lượng phát hành',
-    'Số lượng tồn',
-    'Giá trị',
-    'Số tiền giảm tối đa',
-    'Số tiền thanh toán tối thiểu',
-    'Thành tiền trước KM',
-    'Số lượng voucher phát hành',
-    'Tổng tiền khuyến mãi',
-    'Thành tiền sau khuyến mãi',
-    'Thành tiền gói dịch vụ',
-    'Điểm FGold',
-    'Thanh toán tối thiểu',
-    'Giảm giá tối đa',
-    'Chi phí tạm tính',
-    'Đơn giá',
-    'Tạm tính',
-    'Tổng tiền',
-  ];
-
   dataContent: any = [];
 
   tableTH = [
     {title: 'Mã Gateway', dataField: 'Mã Gateway', key: 'id'},
     {title: 'Tên Gateway', dataField: 'Tên Gateway', key: 'name'},
+    {title: 'Số lượng Node', dataField: 'Số lượng Node', key: 'num_node'},
     {title: 'Kinh độ', dataField: 'Kinh độ', key: 'lon'},
     {title: 'Vĩ độ', dataField: 'Vĩ độ', key: 'lat'},
     {title: 'Trạng thái', dataField: 'trạng thái', key: 'active'},
@@ -125,7 +84,7 @@ export class ManageDeviceComponent implements OnInit {
         }
       });
     } else {
-      this.router.navigate(['/note'], {queryParams: {id: e.key}});
+      this.router.navigate(['/node'], {queryParams: {id: e.key}});
     }
 
   }
@@ -140,25 +99,33 @@ export class ManageDeviceComponent implements OnInit {
         res.data.filter((i: any, index: any) => {
           if (i) {
             this.nathiService.apiGetDetailDevice(i.id.id).subscribe((res2: any) => {
-              if (res2 && res2.GW) {
-                listT1.push({
-                  name: res2.GW[0].value.ID,
-                  lat: res2.GW[0].value.P1 ? String(res2.GW[0].value.P1) : '',
-                  lon: res2.GW[0].value.P2 ? String(res2.GW[0].value.P2) : '',
-                  active: res2.GW[0].value.P1 ? 1 : 0,
-                  id: i.id.id,
-                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
-                });
-              } else {
-                listT1.push({
-                  name: i.name,
-                  lat: '',
-                  lon: '',
-                  active: 0,
-                  id: i.id.id,
-                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
-                });
+              if (res2) {
+                let countNode = Object.keys(res2).map((j: any) => {
+                  if (j.includes("Node")) return j
+                })
+                if (res2.GW) {
+                  listT1.push({
+                    name: res2.GW[0].value.ID,
+                    lat: res2.GW[0].value.P1 ? String(res2.GW[0].value.P1) : '',
+                    lon: res2.GW[0].value.P2 ? String(res2.GW[0].value.P2) : '',
+                    active: res2.GW[0].value.P1 ? 1 : 0,
+                    num_node: countNode.filter(node => node !== undefined).length,
+                    id: i.id.id,
+                    t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
+                  });
+                } else {
+                  listT1.push({
+                    name: i.name,
+                    lat: '',
+                    lon: '',
+                    active: 0,
+                    num_node: countNode.filter(node => node !== undefined).length,
+                    id: i.id.id,
+                    t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime))
+                  });
+                }
               }
+
             });
           }
         });
@@ -186,10 +153,12 @@ export class ManageDeviceComponent implements OnInit {
   apiDeleteGateway(id: any): any {
     this.nathiService.apiDeleteDevice(id).subscribe((res: any) => {
       if (res) {
+        this.spinner.hide()
         this.getAPIListDevice();
         this.confirmDialog.confirm('Thông báo', 'Đã xóa gateway thành công!', '', 'Đóng', '');
       }
     }, (error: any) => {
+      this.spinner.hide()
       this.confirmDialog.confirm('Thông báo', error.error.message, '', 'Đóng', '');
     })
   }

@@ -27,7 +27,7 @@ const routes: Routes = [
         component: HomeCustomerComponent,
       },
       {
-        path: 'note',
+        path: 'node',
         component: ManageNoteComponent,
       },
       {

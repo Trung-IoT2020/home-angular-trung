@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   public marker: L.Marker;
 
   public listGateway: any = [];
+  isLogin: any;
 
   constructor(
     private general: GeneralService,
@@ -35,7 +36,14 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.callAPIGetDevice();
+    this.isLogin = this.nathiService.checkToken();
+    console.log(this.nathiService.checkToken());
+    setTimeout(() => {
+      if (this.isLogin) {
+        this.callAPIGetDevice();
+      }
+    }, 500)
+
 
   }
 
@@ -62,35 +70,44 @@ export class HomeComponent implements OnInit {
           if (i) {
             this.nathiService.apiGetDetailDevice(i.id.id).subscribe((res2: any) => {
               if (res2 && res2.GW) {
-
                 this.marker = (L.marker([String(res2.GW[0].value.P1), String(res2.GW[0].value.P2)], {icon}).addTo(this.map));
                 listT1.push({
-                  name: res2.GW[0].value.ID,
+                  id: i.id.id,
+                  name: i.name,
                   lat: res2.GW[0].value.P1 ? String(res2.GW[0].value.P1) : '',
                   lon: res2.GW[0].value.P2 ? String(res2.GW[0].value.P2) : '',
-                  active: res2.GW[0].value.P1 ? 1 : 0
+                  active: Number(Number(res2.GW[0].ts) + 3600000) > new Date().getTime() ? 1 : 0,
+                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime)),
+                  location: res2.GW[0].value.P1 && res2.GW[0].value.P2 ? 1 : 0
                 });
               } else {
                 listT1.push({
-                  name: "Gateway" + (index + 1),
+                  id: i.id.id,
+                  name: i.name,
                   lat: '',
                   lon: '',
-                  active: 0
+                  t_create: this.general.convertDateToDDMMYY(new Date(i.createdTime)),
+                  active: 0,
+                  location: 0
                 });
               }
             });
           }
         });
         console.log(listT1);
+        listT1.filter((k:any)=>{
+          this.marker.bindPopup("<b>" + k.name + "</b><br><a href='./node?id=" + k.id + "'>ID: " + k.id + "</a><br>Thời gian tạo: " + k.t_create).openPopup();
+        })
         this.listGateway = listT1;
       }
     });
   }
 
   gotoDevice(data: any): any {
+    console.log(data)
     this.map.flyTo([data.lat, data.lon], 18);
+    this.marker.bindPopup("<b>" + data.name + "</b><br><a href='./node?id=" + data.id + "'>ID: " + data.id + "</a><br>Thời gian tạo: " + data.t_create).openPopup();
   }
-
   createDevice(data?: any): any {
     const modalRef = this.modalService.open(AddDeviceModalComponent, {
       backdrop: 'static',
@@ -104,7 +121,11 @@ export class HomeComponent implements OnInit {
     modalRef.componentInstance.modalAction.subscribe((res: any) => {
       console.log(res);
       if (res === 'submit') {
-        this.callAPIGetDevice();
+        setTimeout(() => {
+          this.callAPIGetDevice();
+
+        }, 500);
+
         // this.folder_type === 'POTENTIAL_CUSTOMER' ? this.getAPIListCampaign('') : this.getAPIListRecare('');
       }
     });

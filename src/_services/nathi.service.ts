@@ -138,7 +138,7 @@ export class NathiService {
     const headers = this.header;
     return this.http.get<any>(
       this.baseUrl + "/api/plugins/telemetry/DEVICE/" + idDevice +
-      "/values/timeseries?limit=1&agg=NONE&orderBy=DESC&useStrictDataTypes=true&keys=" +
+      "/values/timeseries?limit=10000&agg=NONE&orderBy=DESC&useStrictDataTypes=true&keys=" +
       nameNote + "&startTs=" + fromDate + "&endTs=" + toDate
       , {headers});
   }

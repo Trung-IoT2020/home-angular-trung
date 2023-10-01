@@ -79,6 +79,7 @@ export class ManageNoteComponent implements OnInit {
       if (res2) {
         const uniqueKeys = [] as any;
         this.listT = [];
+        this.tableTH = [];
         for (const key in res2) {
           if (key.includes('Node')) {
             console.log(res2[key][0].value);
@@ -95,15 +96,26 @@ export class ManageNoteComponent implements OnInit {
         }
 
         // @ts-ignore
-        this.tableTH = uniqueKeys.map((i: any) => {
+        let listTH = uniqueKeys.map((i: any) => {
           return {title: i, dataField: i, key: i}
         });
+        const uniqueItems = new Set(listTH.map((item:any) => JSON.stringify(item)));
+
+        // Chuyển đổi Set thành mảng và gán cho filteredData
+        this.tableTH = Array.from(uniqueItems).map((item:any) => JSON.parse(item)) as any;
+
+        console.log(this.tableTH);
         setTimeout(() => {
           this.dataContent = this.listT;
           this.tableContentEvent.emit(this.dataContent);
           this.tableConfigEvent.emit(this.tableTH);
         }, 500);
       }
+    }, (error: any) => {
+      this.tableTH = [];
+      this.dataContent = [];
+      this.tableContentEvent.emit([]);
+      this.tableConfigEvent.emit([]);
     });
   }
 
@@ -111,7 +123,7 @@ export class ManageNoteComponent implements OnInit {
     console.log('exportFile');
     this.confirmDialog.confirm('Thông báo', `<br>Bạn muốn tải báo cáo này?<br>`, '', 'Xác nhận', 'Đóng').then((confirm) => {
       if (confirm) {
-        this.general.exportExcel(this.dataContent, 'Baocao_thongtin_' + "Device1");
+        this.general.exportExcel(this.dataContent, 'Baocao_thongtin_node_' + this.idGateway);
       }
     });
   }

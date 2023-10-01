@@ -1,14 +1,4 @@
-<div class="top">
-  <div class="row">
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-  </div>
-</div>
-
-
-<div class="row">
+<div class="row" *ngIf="this.isLogin">
   <div class="col-lg-3 d-flex align-items-strech" *ngIf="listGateway && listGateway.length>0">
     <div class="card w-100" style="    border: none; border-radius: 16px;">
       <div class="card-body" style="padding:1.25rem 0 ">
@@ -19,8 +9,8 @@
         </div>
         <div class="content-gateway" style=" margin: auto;">
           <a class="item-content-gateway" *ngFor="let item of listGateway"
-             [style]="  { opacity: item.active===1 ? 1: 0.6}  "
-             (click)="item.active===1 ? gotoDevice(item): ''">
+             [style]="  { opacity: item.location===1 ? 1: 0.6}  "
+             (click)="item.location===1 ? gotoDevice(item): ''">
             <img src="./assets/images/nathi/wifi-router.png" alt="" width="auto" height="auto">
             <h4>{{item.name}}</h4>
             <div class="item-content-gateway-tick" [ngClass]="item.active===1 ?'active-n' :'fail-n'"></div>
@@ -47,7 +37,7 @@
     </div>
   </div>
 </div>
-<div class="bottom-create-device">
+<div class="bottom-create-device" *ngIf="this.isLogin">
   <a class="content-popup" (click)="createDevice()">
     <img src="./assets/images/nathi/plus2.png" alt="">
   </a>

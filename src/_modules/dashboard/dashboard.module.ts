@@ -18,9 +18,11 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
-import {MatNativeDateModule} from "@angular/material/core";
+import {MatNativeDateModule, MatOptionModule} from "@angular/material/core";
 import {ChartDeviceComponent} from "./dashboard-home/screen/chart-device/chart-device.component";
 import {RouterModule} from "@angular/router";
+import {MatSelectModule} from "@angular/material/select";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -50,6 +52,9 @@ import {RouterModule} from "@angular/router";
     MatInputModule,
     MatNativeDateModule,
     SharedModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatListModule,
   ],
 })
 export class DashboardModule {

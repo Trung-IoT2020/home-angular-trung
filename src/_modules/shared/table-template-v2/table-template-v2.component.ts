@@ -134,13 +134,11 @@ export class TableTemplateComponentV2 implements OnInit {
     if (this.tableContentEvent) {
       this.tableContentEvent.subscribe((event: any) => {
         this.dataContent = event;
-        console.log(21, this.dataContent)
       });
     }
     if (this.tableTHEvent) {
       this.tableTHEvent.subscribe((event: any) => {
         this.tableTH = event;
-        console.log(21, this.tableTH)
       });
     }
     if (this.page) {

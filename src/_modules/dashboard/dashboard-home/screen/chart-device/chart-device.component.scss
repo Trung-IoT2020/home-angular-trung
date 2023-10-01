@@ -224,3 +224,33 @@ a {
   }
 }
 
+.caret {
+  display: none;
+}
+
+.btn-group .multiselect {
+  border: 1px solid #ced4da;
+}
+
+.input-promotion-date {
+  display: flex !important;
+}
+
+.fv-row {
+  height: 90px;
+  display: grid;
+}
+
+.mat-primary {
+  border: none;
+  background: #FFF;
+  margin: 0 4px;
+  padding: 0 4px;
+}
+
+.mat-accent {
+  border: none;
+  background: #FFF;
+  margin: 0 4px;
+  padding: 0 4px;
+}
