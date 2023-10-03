@@ -93,6 +93,7 @@ export class ManageNoteComponent implements OnInit {
             }
           }
         }
+        console.log(this.listT);
 
         // @ts-ignore
         let listTH = uniqueKeys.map((i: any) => {

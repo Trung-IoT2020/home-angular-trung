@@ -389,12 +389,17 @@ export class ChartDeviceComponent implements OnInit {
             H: this.listH,
           }
 
+          
+        
+          console.log(this.listResult);
+          this.dataContent = this.listResult.map((i: any) => {
+            let dataPush = i.value;
+            dataPush.t_create = this.general.convertDateToDDMMYY(new Date(i.ts));
+            return dataPush;
+          })
           // @ts-ignore
           this.tableTH = Object.keys(this.listResult[0].value).map((k: any) => {
             return {title: k, dataField: k, key: k};
-          })
-          this.dataContent = this.listResult.map((i: any) => {
-            return i.value
           })
           setTimeout(() => {
             this.tableContentEvent.emit(this.dataContent);

@@ -46,6 +46,9 @@ export class HomeComponent implements OnInit {
         this.callAPIGetDevice();
       }
     }, 500)
+    setTimeout(()=>{
+      window.location.reload();
+    },3600000);
 
 
   }
