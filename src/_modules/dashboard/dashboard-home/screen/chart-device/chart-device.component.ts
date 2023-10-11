@@ -343,6 +343,7 @@ export class ChartDeviceComponent implements OnInit {
   listT: any = [];
   listH: any = [];
 
+  //xu  ly logic get history
   getDataHistory(selectedGateway: any, selectedNode: any, fromDateF: any, toDateF: any): any {
     this.spinner.show();
     this.nathiService.apiHistoryDeviceNote(selectedGateway,

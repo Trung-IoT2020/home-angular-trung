@@ -54,20 +54,20 @@ export class HomeComponent implements OnInit {
   }
 
 
+  //create map
   callAPIGetDevice(): any {
     let listT1 = [] as any;
+    let icon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-shadow.png',
+      iconAnchor: [20, 41],
+      popupAnchor: [0, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+    }) as any;
     this.nathiService.apiGetAllDevice().subscribe((res: any) => {
       if (res && res.data) {
-        const icon = L.icon({
-          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-icon.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-shadow.png',
-          iconAnchor: [20, 41],
-          popupAnchor: [0, -34],
-          tooltipAnchor: [16, -28],
-          shadowSize: [41, 41],
-          shadowAnchor: [12, 41],
-        });
-
         res.data.filter((i: any, index: any) => {
           if (i) {
             this.nathiService.apiGetDetailDevice(i.id.id).subscribe((res2: any) => {
@@ -107,8 +107,19 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  //xu ly dieu huong map
   gotoDevice(data: any): any {
+    let icon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/images/marker-shadow.png',
+      iconAnchor: [20, 41],
+      popupAnchor: [0, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+    }) as any;
     this.map.flyTo([data.lat, data.lon], 18);
+    this.marker = (L.marker([String(data.lat), String(data.lon)], {icon}).addTo(this.map));
     this.marker.bindPopup("<b>" + data.name + "</b><br><a href='./node?id=" + data.id + "'>ID: " + data.id + "</a><br>Thời gian tạo: " + data.t_create).openPopup();
   }
 
@@ -121,7 +132,6 @@ export class HomeComponent implements OnInit {
     modalRef.componentInstance.dataCampaignDetail = data ? data : undefined;
     modalRef.componentInstance.modalAction.subscribe((res: any) => {
       if (res === 'submit') {
-        console.log(12334555);
         this.callAPIGetDevice();
       }
     });

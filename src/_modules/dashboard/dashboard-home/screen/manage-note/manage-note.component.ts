@@ -80,10 +80,13 @@ export class ManageNoteComponent implements OnInit {
         const uniqueKeys = [] as any;
         this.listT = [];
         this.tableTH = [];
+        console.log(res2);
         for (const key in res2) {
           if (key.includes('Node')) {
+            let  v= res2[key][0].value;
+            v.t_create = this.general.convertDateToDDMMYY(new Date(res2[key][0].ts));
             // @ts-ignore
-            this.listT.push(res2[key][0].value);
+            this.listT.push(v);
             const values = res2[key];
             for (const item of values) {
               if (item.value) {
@@ -93,7 +96,7 @@ export class ManageNoteComponent implements OnInit {
             }
           }
         }
-        console.log(this.listT);
+     
 
         // @ts-ignore
         let listTH = uniqueKeys.map((i: any) => {
